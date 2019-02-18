@@ -1,5 +1,9 @@
 package event
 
+const (
+	PlacementDefault = iota
+)
+
 // BlockPlaced is called by a client when it places a block.
 type BlockPlaced struct {
 	// AuxType is the metadata value of the block placed.

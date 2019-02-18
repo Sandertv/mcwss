@@ -16,24 +16,31 @@ type Player struct {
 	handlers map[event.Name]func(event interface{})
 }
 
-// OnTravelled subscribes to the client travelling to places.
+// OnTravelled subscribes to the player travelling to places.
 func (player *Player) OnTravelled(handler func(event *event.PlayerTravelled)) {
 	_ = player.subscribeTo(event.NamePlayerTravelled, func(e interface{}) {
 		handler(e.(*event.PlayerTravelled))
 	})
 }
 
-// OnItemUsed subscribes to items used by the client.
+// OnItemUsed subscribes to items used by the player.
 func (player *Player) OnItemUsed(handler func(event *event.ItemUsed)) {
 	_ = player.subscribeTo(event.NameItemUsed, func(e interface{}) {
 		handler(e.(*event.ItemUsed))
 	})
 }
 
-// OnBlockPlace subscribes to blocks placed by the client.
-func (player *Player) OnBlockPlace(handler func(event *event.BlockPlaced)) {
+// OnBlockPlaced subscribes to blocks placed by the player.
+func (player *Player) OnBlockPlaced(handler func(event *event.BlockPlaced)) {
 	_ = player.subscribeTo(event.NameBlockPlaced, func(e interface{}) {
 		handler(e.(*event.BlockPlaced))
+	})
+}
+
+// OnBlockBroken subscribes to blocks broken by the player.
+func (player *Player) OnBlockBroken(handler func(event *event.BlockBroken)) {
+	_ = player.subscribeTo(event.NameBlockBroken, func(e interface{}) {
+		handler(e.(*event.BlockBroken))
 	})
 }
 

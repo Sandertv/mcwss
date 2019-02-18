@@ -12,7 +12,10 @@ func main() {
 		player.OnPlayerMessage(func(event *event.PlayerMessage) {
 
 		})
-		player.OnBlockPlace(func(event *event.BlockPlaced) {
+		player.OnBlockBroken(func(event *event.BlockBroken) {
+
+		})
+		player.OnBlockPlaced(func(event *event.BlockPlaced) {
 
 		})
 		player.OnItemUsed(func(event *event.ItemUsed) {

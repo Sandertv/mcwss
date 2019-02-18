@@ -16,6 +16,13 @@ type Player struct {
 	handlers map[event.Name]func(event interface{})
 }
 
+// OnTravelled subscribes to the client travelling to places.
+func (player *Player) OnTravelled(handler func(event *event.PlayerTravelled)) {
+	_ = player.subscribeTo(event.NamePlayerTravelled, func(e interface{}) {
+		handler(e.(*event.PlayerTravelled))
+	})
+}
+
 // OnItemUsed subscribes to items used by the client.
 func (player *Player) OnItemUsed(handler func(event *event.ItemUsed)) {
 	_ = player.subscribeTo(event.NameItemUsed, func(e interface{}) {
@@ -80,6 +87,11 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 			return fmt.Errorf("event response: unknown event with name %v", body.EventName)
 		}
 		_ = json.Unmarshal(body.Properties, &eventData)
+
+		if measurable, ok := eventData.(event.Measurable); ok {
+			// Parse measurements if the event requires them.
+			measurable.ConsumeMeasurements(body.Measurements)
+		}
 
 		// Find the handler by the event name.
 		handler, ok := player.handlers[body.EventName]

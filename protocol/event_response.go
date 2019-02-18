@@ -11,16 +11,7 @@ type EventResponse struct {
 	// EventName is the name of the event, for example 'BlockPlaced'.
 	EventName event.Name `json:"eventName"`
 	// Measurements ...
-	Measurements struct {
-		// Count ...
-		Count int `json:"count"`
-		// RecordCount ...
-		RecordCount int `json:"recordCnt"`
-		// SequenceMax ...
-		SequenceMax int `json:"seqMax"`
-		// SequenceMin ...
-		SequenceMin int `json:"seqMin"`
-	} `json:"measurements"`
+	Measurements event.Measurements `json:"measurements"`
 	// Properties is a collection of properties (un)specific to an event. A part of these properties are
 	// shared among all events, others are specific to this event.
 	Properties json.RawMessage `json:"properties"`

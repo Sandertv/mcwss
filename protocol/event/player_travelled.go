@@ -13,6 +13,8 @@ type PlayerTravelled struct {
 	// NewBiome is the new biome of the player. This is often the same as the current biome.
 	NewBiome int
 
+	// TravelMethodType is the method type indicating the way the player travelled.
+	TravelMethodType int
 	// HasRelevantBuff specifies if a player has an effect that affects its movement, such as slowness, jump
 	// boost, slow falling etc.
 	HasRelevantBuff bool

@@ -4,12 +4,14 @@ package event
 type Name string
 
 const (
-	NameBlockPlaced Name = "BlockPlaced"
+	NameBlockPlaced   Name = "BlockPlaced"
 	NamePlayerMessage Name = "PlayerMessage"
+	NameItemUsed      Name = "ItemUsed"
 )
 
 // Events is a map used to find the corresponding event for an event name.
 var Events = map[Name]interface{}{
-	NameBlockPlaced: &BlockPlaced{},
+	NameBlockPlaced:   &BlockPlaced{},
 	NamePlayerMessage: &PlayerMessage{},
+	NameItemUsed:      &ItemUsed{},
 }

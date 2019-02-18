@@ -16,6 +16,13 @@ type Player struct {
 	handlers map[event.Name]func(event interface{})
 }
 
+// OnItemUsed subscribes to items used by the client.
+func (player *Player) OnItemUsed(handler func(event *event.ItemUsed)) {
+	_ = player.subscribeTo(event.NameItemUsed, func(e interface{}) {
+		handler(e.(*event.ItemUsed))
+	})
+}
+
 // OnBlockPlace subscribes to blocks placed by the client.
 func (player *Player) OnBlockPlace(handler func(event *event.BlockPlaced)) {
 	_ = player.subscribeTo(event.NameBlockPlaced, func(e interface{}) {

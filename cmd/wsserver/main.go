@@ -16,6 +16,9 @@ func main() {
 		player.OnBlockPlace(func(event *event.BlockPlaced) {
 
 		})
+		player.OnItemUsed(func(event *event.ItemUsed) {
+
+		})
 	})
 
 	if err := server.Run(); err != nil {

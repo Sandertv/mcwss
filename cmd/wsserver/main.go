@@ -13,6 +13,9 @@ func main() {
 		player.SubscribeToPlayerMessage(func(event *event.PlayerMessage) {
 			fmt.Printf("%v sent a message: %v (%v)\n", event.Sender, event.Message, event.MessageType)
 		})
+		player.SubscribeToBlockPlace(func(event *event.BlockPlaced) {
+
+		})
 	})
 
 	if err := server.Run(); err != nil {

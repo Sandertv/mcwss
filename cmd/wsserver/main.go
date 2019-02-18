@@ -10,10 +10,10 @@ import (
 func main() {
 	server := mcwss.NewServer(nil)
 	server.OnConnection(func(player *mcwss.Player) {
-		player.SubscribeToPlayerMessage(func(event *event.PlayerMessage) {
+		player.OnPlayerMessage(func(event *event.PlayerMessage) {
 			fmt.Printf("%v sent a message: %v (%v)\n", event.Sender, event.Message, event.MessageType)
 		})
-		player.SubscribeToBlockPlace(func(event *event.BlockPlaced) {
+		player.OnBlockPlace(func(event *event.BlockPlaced) {
 
 		})
 	})

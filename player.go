@@ -16,30 +16,20 @@ type Player struct {
 	handlers map[event.Name]func(event interface{})
 }
 
-// SubscribeToBlockPlace subscribes to blocks placed by the client.
-func (player *Player) SubscribeToBlockPlace(handler func(event *event.BlockPlaced)) {
-	_ = player.SubscribeTo(event.NameBlockPlaced, func(e interface{}) {
+// OnBlockPlace subscribes to blocks placed by the client.
+func (player *Player) OnBlockPlace(handler func(event *event.BlockPlaced)) {
+	_ = player.subscribeTo(event.NameBlockPlaced, func(e interface{}) {
 		handler(e.(*event.BlockPlaced))
 	})
 }
 
-// SubscribeToPlayerMessage subscribes to player messages sent and received by the client. Note that an event
+// OnPlayerMessage subscribes to player messages sent and received by the client. Note that an event
 // is called both when the player chats and when the player receives its own chat, resulting in a duplicate
 // event when the player chats.
-func (player *Player) SubscribeToPlayerMessage(handler func(event *event.PlayerMessage)) {
-	_ = player.SubscribeTo(event.NamePlayerMessage, func(e interface{}) {
+func (player *Player) OnPlayerMessage(handler func(event *event.PlayerMessage)) {
+	_ = player.subscribeTo(event.NamePlayerMessage, func(e interface{}) {
 		handler(e.(*event.PlayerMessage))
 	})
-}
-
-// SubscribeTo subscribes to an arbitrary event. It is recommended to use the methods to listen specifically
-// to events above.
-func (player *Player) SubscribeTo(eventName event.Name, handler func(event interface{})) error {
-	player.handlers[eventName] = handler
-	if err := player.WriteJSON(protocol.NewEventRequest(eventName, protocol.Subscribe)); err != nil {
-		return fmt.Errorf("error writing event subscribe request: %v", err)
-	}
-	return nil
 }
 
 // UnsubscribeFrom unsubscribes from events with the event name passed. The handler used to handle the event
@@ -49,6 +39,16 @@ func (player *Player) UnsubscribeFrom(eventName event.Name) error {
 		return fmt.Errorf("error writing event unsubscribe request: %v", err)
 	}
 	delete(player.handlers, eventName)
+	return nil
+}
+
+// subscribeTo subscribes to an arbitrary event. It is recommended to use the methods to listen specifically
+// to events above.
+func (player *Player) subscribeTo(eventName event.Name, handler func(event interface{})) error {
+	player.handlers[eventName] = handler
+	if err := player.WriteJSON(protocol.NewEventRequest(eventName, protocol.Subscribe)); err != nil {
+		return fmt.Errorf("error writing event subscribe request: %v", err)
+	}
 	return nil
 }
 

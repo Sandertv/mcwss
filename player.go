@@ -166,6 +166,12 @@ func (player *Player) OnPlayerMessage(handler func(event *event.PlayerMessage)) 
 	})
 }
 
+// CloseConnection closes the socket connection with the player. The player will be closed shortly after this
+// method is called.
+func (player *Player) CloseConnection() {
+	player.Exec("closewebsocket", nil)
+}
+
 // UnsubscribeFrom unsubscribes from events with the event name passed. The handler used to handle the event
 // will no longer be called.
 func (player *Player) UnsubscribeFrom(eventName event.Name) error {

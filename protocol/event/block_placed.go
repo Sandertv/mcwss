@@ -16,8 +16,6 @@ type BlockPlaced struct {
 	Type int
 	// PlacementMethod was the method that was used to place the block.
 	PlacementMethod int
-	// NetworkType no longer appears to be used. It is always 0.
-	NetworkType int
 	// ToolItemType is the item ID of the item that was used to place the block. Often, this is the same as
 	// the Type field.
 	ToolItemType int

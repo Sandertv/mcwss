@@ -6,8 +6,6 @@ type ItemCrafted struct {
 	Type int
 	// AuxType is the metadata or variant of the item. For oak wooden planks for example, this is 0.
 	AuxType int
-	// NetworkType no longer seems to be used. It is always 0.
-	NetworkType int
 	// UsedCraftingTable indicates if the player was using a crafting table to craft this item. If the
 	// inventory itself was used, this is false.
 	UsedCraftingTable bool

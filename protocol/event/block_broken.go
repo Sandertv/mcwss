@@ -16,8 +16,6 @@ type BlockBroken struct {
 	Type int
 	// DestructionMethod is the method used to break the block.
 	DestructionMethod int
-	// NetworkType no longer appears to be used. It is always 0.
-	NetworkType int
 	// ToolItemType is the item type of the item that was used to break the block.
 	ToolItemType int
 }

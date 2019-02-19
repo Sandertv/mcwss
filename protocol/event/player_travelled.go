@@ -9,7 +9,7 @@ const (
 	TravelFlying
 	TravelVehicle
 	TravelSneaking
-	TravelSprintings
+	TravelSprinting
 	TravelBouncing
 )
 

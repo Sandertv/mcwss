@@ -15,7 +15,8 @@ import (
 type Player struct {
 	*websocket.Conn
 
-	name string
+	name      string
+	connected bool
 	event.Properties
 
 	handlers         map[event.Name]func(event interface{})
@@ -25,6 +26,12 @@ type Player struct {
 // Name returns the name of the player.
 func (player *Player) Name() string {
 	return player.name
+}
+
+// Connected checks if a player is currently connected. If not, the reference to this player should be
+// released as soon as possible.
+func (player *Player) Connected() bool {
+	return player.connected
 }
 
 // Exec sends a command string with a callback that can process the output of the command. The callback passed
@@ -119,6 +126,7 @@ func (player *Player) UnsubscribeFrom(eventName event.Name) error {
 // newPlayer returns an initialised player for a websocket connection.
 func newPlayer(conn *websocket.Conn) *Player {
 	player := &Player{
+		connected:        true,
 		Conn:             conn,
 		handlers:         make(map[event.Name]func(event interface{})),
 		commandCallbacks: make(map[string]reflect.Value),

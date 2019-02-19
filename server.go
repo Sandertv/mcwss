@@ -76,6 +76,7 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 			log.Panicf("error closing websocket connection: %v", err)
 		}
 		delete(server.players, player)
+		player.connected = false
 	}()
 
 	for {

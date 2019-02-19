@@ -19,13 +19,35 @@ type Player struct {
 	connected bool
 	event.Properties
 
+	agent *Agent
+
 	handlers         map[event.Name]func(event interface{})
 	commandCallbacks map[string]reflect.Value
+}
+
+// NewPlayer returns an initialised player for a websocket connection.
+func NewPlayer(conn *websocket.Conn) *Player {
+	player := &Player{
+		connected:        true,
+		Conn:             conn,
+		handlers:         make(map[event.Name]func(event interface{})),
+		commandCallbacks: make(map[string]reflect.Value),
+	}
+	player.Exec("getlocalplayername", func(response *command.LocalPlayerName) {
+		player.name = response.LocalPlayerName
+	})
+	player.agent = NewAgent(player)
+	return player
 }
 
 // Name returns the name of the player.
 func (player *Player) Name() string {
 	return player.name
+}
+
+// Agent returns the controllable agent entity of the player.
+func (player *Player) Agent() *Agent {
+	return player.agent
 }
 
 // Connected checks if a player is currently connected. If not, the reference to this player should be
@@ -40,14 +62,17 @@ func (player *Player) Connected() bool {
 //
 // player.Exec("getlocalplayername", func(response *command.LocalPlayerName){})
 // player.Exec("getlocalplayername", func(response map[string]interface{}){})
+//
+// Nil may also be passed if no callback needs to be executed.
 func (player *Player) Exec(commandLine string, callback interface{}) {
 	val := reflect.ValueOf(callback)
-	t := val.Type()
-	// Do some basic function validation.
-	if t.Kind() != reflect.Func || t.NumIn() != 1 || (t.In(0).Kind() != reflect.Ptr && t.In(0).Kind() != reflect.Map) {
-		panic("invalid callback type passed. must be of type func(*commandResponse)")
+	if callback != nil {
+		t := val.Type()
+		// Do some basic function validation.
+		if t.Kind() != reflect.Func || t.NumIn() != 1 || (t.In(0).Kind() != reflect.Ptr && t.In(0).Kind() != reflect.Map) {
+			panic("invalid callback type passed. must be of type func(*commandResponse)")
+		}
 	}
-
 	packet := protocol.NewCommandRequest(commandLine)
 	player.commandCallbacks[packet.Header.RequestID] = val
 	_ = player.WriteJSON(packet)
@@ -123,20 +148,6 @@ func (player *Player) UnsubscribeFrom(eventName event.Name) error {
 	return nil
 }
 
-// newPlayer returns an initialised player for a websocket connection.
-func newPlayer(conn *websocket.Conn) *Player {
-	player := &Player{
-		connected:        true,
-		Conn:             conn,
-		handlers:         make(map[event.Name]func(event interface{})),
-		commandCallbacks: make(map[string]reflect.Value),
-	}
-	player.Exec("getlocalplayername", func(response *command.LocalPlayerName) {
-		player.name = response.LocalPlayerName
-	})
-	return player
-}
-
 // subscribeTo subscribes to an arbitrary event. It is recommended to use the methods to listen specifically
 // to events above.
 func (player *Player) subscribeTo(eventName event.Name, handler func(event interface{})) error {
@@ -163,11 +174,13 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 		// Remove the command callback from the map.
 		delete(player.commandCallbacks, packet.Header.RequestID)
 
-		commandResponseValue := reflect.New(callback.Type().In(0)).Interface()
-		if err := json.Unmarshal([]byte(*body), commandResponseValue); err != nil {
-			return fmt.Errorf("command response: malformed response JSON %v: %v", string(*body), err)
+		if callback.IsValid() {
+			commandResponseValue := reflect.New(callback.Type().In(0)).Interface()
+			if err := json.Unmarshal([]byte(*body), commandResponseValue); err != nil {
+				return fmt.Errorf("command response: malformed response JSON %v: %v", string(*body), err)
+			}
+			callback.Call([]reflect.Value{reflect.ValueOf(commandResponseValue).Elem()})
 		}
-		callback.Call([]reflect.Value{reflect.ValueOf(commandResponseValue).Elem()})
 	case *protocol.EventResponse:
 		properties := event.Properties{}
 		if err := json.Unmarshal(body.Properties, &properties); err != nil {

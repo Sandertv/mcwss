@@ -1,17 +1,25 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
 	"github.com/sandertv/mcwss"
 	"github.com/sandertv/mcwss/protocol/event"
 	"log"
+	"os"
 )
 
 func main() {
 	server := mcwss.NewServer(nil)
 	server.OnConnection(func(player *mcwss.Player) {
-		player.OnPlayerMessage(func(event *event.PlayerMessage) {
-
-		})
+		go func() {
+			scanner := bufio.NewScanner(os.Stdin)
+			for scanner.Scan() && player.Connected() {
+				player.Exec(scanner.Text(), func(data map[string]interface{}) {
+					fmt.Println(data)
+				})
+			}
+		}()
 		player.OnBlockBroken(func(event *event.BlockBroken) {
 			player.ExecAs("say I broke a block", func(statusCode int) {
 

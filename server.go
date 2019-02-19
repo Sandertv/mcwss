@@ -64,7 +64,7 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 	}
 
 	// Initialise the player and add it to the players map.
-	player := newPlayer(ws)
+	player := NewPlayer(ws)
 	server.players[player] = true
 
 	// Allow the creator of the server to interact with the new player.

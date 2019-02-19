@@ -36,6 +36,18 @@ func NewPlayer(conn *websocket.Conn) *Player {
 	player.Exec("getlocalplayername", func(response *command.LocalPlayerName) {
 		player.name = response.LocalPlayerName
 	})
+	player.subscribeTo("CraftingSessionStart", func(event interface{}) {
+
+	})
+	player.subscribeTo("GameTypeChanged", func(event interface{}) {
+
+	})
+	player.subscribeTo("BookEdited", func(event interface{}) {
+
+	})
+	player.subscribeTo("BookExported", func(event interface{}) {
+
+	})
 	player.agent = NewAgent(player)
 	return player
 }
@@ -91,6 +103,13 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 		}
 		code, _ := codeInterface.(int)
 		callback(code)
+	})
+}
+
+// OnBookEdited subscribes to edits by the player to a book after closing it.
+func (player *Player) OnBookEdited(handler func(event *event.BookEdited)) {
+	_ = player.subscribeTo(event.NameBookEdited, func(e interface{}) {
+		handler(e.(*event.BookEdited))
 	})
 }
 

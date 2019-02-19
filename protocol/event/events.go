@@ -10,6 +10,7 @@ const (
 	NamePlayerTravelled Name = "PlayerTravelled"
 	NamePlayerTransform Name = "PlayerTransform"
 	NameItemUsed        Name = "ItemUsed"
+	NameBookEdited      Name = "BookEdited"
 )
 
 // Events is a map used to find the corresponding event for an event name.
@@ -20,4 +21,5 @@ var Events = map[Name]interface{}{
 	NamePlayerTravelled: &PlayerTravelled{},
 	NamePlayerTransform: &PlayerTransform{},
 	NameItemUsed:        &ItemUsed{},
+	NameBookEdited:      &BookEdited{},
 }

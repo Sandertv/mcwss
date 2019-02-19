@@ -129,6 +129,13 @@ func (player *Player) OnItemUsed(handler func(event *event.ItemUsed)) {
 	})
 }
 
+// OnItemCrafted subscribes to items crafted by the player.
+func (player *Player) OnItemCrafted(handler func(event *event.ItemCrafted)) {
+	_ = player.subscribeTo(event.NameItemCrafted, func(e interface{}) {
+		handler(e.(*event.ItemCrafted))
+	})
+}
+
 // OnBlockPlaced subscribes to blocks placed by the player.
 func (player *Player) OnBlockPlaced(handler func(event *event.BlockPlaced)) {
 	_ = player.subscribeTo(event.NameBlockPlaced, func(e interface{}) {

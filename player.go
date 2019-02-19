@@ -16,6 +16,13 @@ type Player struct {
 	handlers map[event.Name]func(event interface{})
 }
 
+// OnTransform subscribes to transformations done to the player, usually sent by means such as teleporting.
+func (player *Player) OnTransform(handler func(event *event.PlayerTransform)) {
+	_ = player.subscribeTo(event.NamePlayerTransform, func(e interface{}) {
+		handler(e.(*event.PlayerTransform))
+	})
+}
+
 // OnTravelled subscribes to the player travelling to places.
 func (player *Player) OnTravelled(handler func(event *event.PlayerTravelled)) {
 	_ = player.subscribeTo(event.NamePlayerTravelled, func(e interface{}) {

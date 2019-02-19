@@ -7,8 +7,9 @@ const (
 	NameBlockPlaced     Name = "BlockPlaced"
 	NameBlockBroken     Name = "BlockBroken"
 	NamePlayerMessage   Name = "PlayerMessage"
-	NameItemUsed        Name = "ItemUsed"
 	NamePlayerTravelled Name = "PlayerTravelled"
+	NamePlayerTransform Name = "PlayerTransform"
+	NameItemUsed        Name = "ItemUsed"
 )
 
 // Events is a map used to find the corresponding event for an event name.
@@ -16,6 +17,7 @@ var Events = map[Name]interface{}{
 	NameBlockPlaced:     &BlockPlaced{},
 	NameBlockBroken:     &BlockBroken{},
 	NamePlayerMessage:   &PlayerMessage{},
-	NameItemUsed:        &ItemUsed{},
 	NamePlayerTravelled: &PlayerTravelled{},
+	NamePlayerTransform: &PlayerTransform{},
+	NameItemUsed:        &ItemUsed{},
 }

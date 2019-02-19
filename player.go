@@ -36,18 +36,6 @@ func NewPlayer(conn *websocket.Conn) *Player {
 	player.Exec("getlocalplayername", func(response *command.LocalPlayerName) {
 		player.name = response.LocalPlayerName
 	})
-	player.subscribeTo("CraftingSessionStart", func(event interface{}) {
-
-	})
-	player.subscribeTo("GameTypeChanged", func(event interface{}) {
-
-	})
-	player.subscribeTo("BookEdited", func(event interface{}) {
-
-	})
-	player.subscribeTo("BookExported", func(event interface{}) {
-
-	})
 	player.agent = NewAgent(player)
 	return player
 }
@@ -103,6 +91,13 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 		}
 		code, _ := codeInterface.(int)
 		callback(code)
+	})
+}
+
+// OnSignedBookOpened subscribes to signed books opened by the player.
+func (player *Player) OnSignedBookOpened(handler func(event *event.SignedBookOpened)) {
+	_ = player.subscribeTo(event.NameSignedBookOpened, func(e interface{}) {
+		handler(e.(*event.SignedBookOpened))
 	})
 }
 

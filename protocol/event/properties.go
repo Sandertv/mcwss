@@ -21,6 +21,7 @@ type Properties struct {
 	Platform                       string `json:"Plat"`
 	PlayerGameMode                 int
 	SchemaCommitHash               string
+	Sequence                       int    `json:"Seq"`
 	ServerID                       string `json:"ServerId"`
 	ToolItemType                   int
 	Treatments                     string

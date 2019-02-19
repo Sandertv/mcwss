@@ -10,6 +10,4 @@ type PlayerMessage struct {
 	// Sender is the name of the sender of the message. This may be the name of the receiver if the receiver
 	// sent a message.
 	Sender string
-	// Sequence is the 'sequence number' of the message.
-	Sequence int `json:"Seq"`
 }

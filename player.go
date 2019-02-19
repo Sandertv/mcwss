@@ -52,16 +52,12 @@ func (player *Player) Exec(commandLine string, callback interface{}) {
 // captured by the server that indicates if the command was successful.
 func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) {
 	player.Exec(fmt.Sprintf("execute %v ~ ~ ~ %v", player.name, commandLine), func(response map[string]interface{}) {
-		codeInterface, ok := response["statusCode"]
-		if !ok {
+		codeInterface, exists := response["statusCode"]
+		if !exists {
 			log.Printf("exec as: invalid response JSON")
 			return
 		}
-		code, ok := codeInterface.(int)
-		if !ok {
-			log.Printf("exec as: invalid status code type")
-			return
-		}
+		code, _ := codeInterface.(int)
 		callback(code)
 	})
 }

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/gorilla/websocket"
 	"github.com/sandertv/mcwss/protocol"
-	"github.com/sandertv/mcwss/protocol/event"
 	"log"
 	"net/http"
 )
@@ -12,11 +11,11 @@ import (
 // Server is the main entry-point of the mcwss package. It allows interfacing with clients connected to it and
 // provides methods to ease the use.
 type Server struct {
-	config Config
+	config   Config
 	upgrader websocket.Upgrader
 
-	players map[*Player]bool
-	connectionFunc func(conn *Player)
+	players           map[*Player]bool
+	connectionFunc    func(conn *Player)
 	disconnectionFunc func(conn *Player)
 }
 
@@ -24,9 +23,9 @@ type Server struct {
 // configuration is used. If nil is passed, the default configuration is used. (see config.go/defaultConfig())
 func NewServer(config *Config) *Server {
 	server := &Server{
-		players: make(map[*Player]bool),
-		config: defaultConfig(),
-		connectionFunc: func(conn *Player) {},
+		players:           make(map[*Player]bool),
+		config:            defaultConfig(),
+		connectionFunc:    func(conn *Player) {},
 		disconnectionFunc: func(conn *Player) {},
 	}
 	if config != nil {
@@ -65,7 +64,7 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 	}
 
 	// Initialise the player and add it to the players map.
-	player := &Player{Conn: ws, handlers: make(map[event.Name]func(interface{}))}
+	player := newPlayer(ws)
 	server.players[player] = true
 
 	// Allow the creator of the server to interact with the new player.
@@ -104,9 +103,15 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 		// The packet.Body is currently a map because of some funny JSON behaviour. We marshal and unmarshal
 		// it into a pointer and set it back to have a pointer to a struct as body.
 		data, _ := json.Marshal(packet.Body)
-		if err := json.Unmarshal(data, &body); err != nil {
-			log.Printf("map to struct conversion failed: %v", err)
-			break
+		cmdResponse, ok := body.(*protocol.CommandResponse)
+
+		if !ok {
+			if err := json.Unmarshal(data, &body); err != nil {
+				log.Printf("map to struct conversion failed: %v", err)
+				break
+			}
+		} else {
+			*cmdResponse = protocol.CommandResponse(data)
 		}
 		packet.Body = body
 

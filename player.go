@@ -5,15 +5,65 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/sandertv/mcwss/protocol"
+	"github.com/sandertv/mcwss/protocol/command"
 	"github.com/sandertv/mcwss/protocol/event"
+	"log"
 	"reflect"
 )
 
 // Player is a player connected to the websocket server.
 type Player struct {
 	*websocket.Conn
+
+	name string
 	event.Properties
-	handlers map[event.Name]func(event interface{})
+
+	handlers         map[event.Name]func(event interface{})
+	commandCallbacks map[string]reflect.Value
+}
+
+// Name returns the name of the player.
+func (player *Player) Name() string {
+	return player.name
+}
+
+// Exec sends a command string with a callback that can process the output of the command. The callback passed
+// must have one input argument, being the container of the output.
+// This may be done using either a pointer to a struct, or a map, like so:
+//
+// player.Exec("getlocalplayername", func(response *command.LocalPlayerName){})
+// player.Exec("getlocalplayername", func(response map[string]interface{}){})
+func (player *Player) Exec(commandLine string, callback interface{}) {
+	val := reflect.ValueOf(callback)
+	t := val.Type()
+	// Do some basic function validation.
+	if t.Kind() != reflect.Func || t.NumIn() != 1 || (t.In(0).Kind() != reflect.Ptr && t.In(0).Kind() != reflect.Map) {
+		panic("invalid callback type passed. must be of type func(*commandResponse)")
+	}
+
+	packet := protocol.NewCommandRequest(commandLine)
+	player.commandCallbacks[packet.Header.RequestID] = val
+	_ = player.WriteJSON(packet)
+}
+
+// ExecAs sends a command string as if it were sent by the player itself with a callback that can process the
+// output of the command. The callback passed must have one input argument, being the container of the output.
+// The output of the command is captured by the player, not by the websocket server. Only a status code is
+// captured by the server that indicates if the command was successful.
+func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) {
+	player.Exec(fmt.Sprintf("execute %v ~ ~ ~ %v", player.name, commandLine), func(response map[string]interface{}) {
+		codeInterface, ok := response["statusCode"]
+		if !ok {
+			log.Printf("exec as: invalid response JSON")
+			return
+		}
+		code, ok := codeInterface.(int)
+		if !ok {
+			log.Printf("exec as: invalid status code type")
+			return
+		}
+		callback(code)
+	})
 }
 
 // OnTransform subscribes to transformations done to the player, usually sent by means such as teleporting.
@@ -70,6 +120,19 @@ func (player *Player) UnsubscribeFrom(eventName event.Name) error {
 	return nil
 }
 
+// newPlayer returns an initialised player for a websocket connection.
+func newPlayer(conn *websocket.Conn) *Player {
+	player := &Player{
+		Conn:             conn,
+		handlers:         make(map[event.Name]func(event interface{})),
+		commandCallbacks: make(map[string]reflect.Value),
+	}
+	player.Exec("getlocalplayername", func(response *command.LocalPlayerName) {
+		player.name = response.LocalPlayerName
+	})
+	return player
+}
+
 // subscribeTo subscribes to an arbitrary event. It is recommended to use the methods to listen specifically
 // to events above.
 func (player *Player) subscribeTo(eventName event.Name, handler func(event interface{})) error {
@@ -88,6 +151,19 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 		return fmt.Errorf("unknown packet %v", reflect.TypeOf(body).Name())
 	case *protocol.ErrorResponse:
 		return fmt.Errorf("a client side error occurred (code = %v): %v", body.StatusCode, body.StatusMessage)
+	case *protocol.CommandResponse:
+		callback, ok := player.commandCallbacks[packet.Header.RequestID]
+		if !ok {
+			return fmt.Errorf("command response: got command response with unknown requestID %v", packet.Header.RequestID)
+		}
+		// Remove the command callback from the map.
+		delete(player.commandCallbacks, packet.Header.RequestID)
+
+		commandResponseValue := reflect.New(callback.Type().In(0)).Interface()
+		if err := json.Unmarshal([]byte(*body), commandResponseValue); err != nil {
+			return fmt.Errorf("command response: malformed response JSON %v: %v", string(*body), err)
+		}
+		callback.Call([]reflect.Value{reflect.ValueOf(commandResponseValue).Elem()})
 	case *protocol.EventResponse:
 		properties := event.Properties{}
 		if err := json.Unmarshal(body.Properties, &properties); err != nil {

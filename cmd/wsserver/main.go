@@ -13,7 +13,9 @@ func main() {
 
 		})
 		player.OnBlockBroken(func(event *event.BlockBroken) {
+			player.ExecAs("say I broke a block", func(statusCode int) {
 
+			})
 		})
 		player.OnBlockPlaced(func(event *event.BlockPlaced) {
 

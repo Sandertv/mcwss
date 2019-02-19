@@ -6,6 +6,7 @@ type Name string
 const (
 	NameBlockPlaced      Name = "BlockPlaced"
 	NameBlockBroken      Name = "BlockBroken"
+	NameEndOfDay         Name = "EndOfDay"
 	NamePlayerMessage    Name = "PlayerMessage"
 	NamePlayerTravelled  Name = "PlayerTravelled"
 	NamePlayerTransform  Name = "PlayerTransform"
@@ -19,6 +20,7 @@ const (
 var Events = map[Name]interface{}{
 	NameBlockPlaced:      &BlockPlaced{},
 	NameBlockBroken:      &BlockBroken{},
+	NameEndOfDay:         &EndOfDay{},
 	NamePlayerMessage:    &PlayerMessage{},
 	NamePlayerTravelled:  &PlayerTravelled{},
 	NamePlayerTransform:  &PlayerTransform{},

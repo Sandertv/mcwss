@@ -94,6 +94,13 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 	})
 }
 
+// OnEndOfDay subscribes to events called when the end of a day was reached naturally. (without commands)
+func (player *Player) OnEndOfDay(handler func(event *event.EndOfDay)) {
+	_ = player.subscribeTo(event.NameEndOfDay, func(e interface{}) {
+		handler(e.(*event.EndOfDay))
+	})
+}
+
 // OnSignedBookOpened subscribes to signed books opened by the player.
 func (player *Player) OnSignedBookOpened(handler func(event *event.SignedBookOpened)) {
 	_ = player.subscribeTo(event.NameSignedBookOpened, func(e interface{}) {

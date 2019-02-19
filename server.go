@@ -2,7 +2,6 @@ package mcwss
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/sandertv/mcwss/protocol"
 	"log"
@@ -112,7 +111,6 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 				log.Printf("map to struct conversion failed: %v", err)
 				break
 			}
-			fmt.Println(string(payload))
 		} else {
 			*cmdResponse = protocol.CommandResponse(data)
 		}

@@ -1,5 +1,18 @@
 package event
 
+const (
+	TravelWalking = iota
+	TravelSwimmingInWater
+	TravelFalling
+	TravelClimbing
+	TravelSwimmingInLava
+	TravelFlying
+	TravelVehicle
+	TravelSneaking
+	TravelSprintings
+	TravelBouncing
+)
+
 // PlayerTravelled is sent by the client when it travels to a new destination.
 type PlayerTravelled struct {
 	// MetresTravelled is the distance a player has travelled since the last player travelled event.

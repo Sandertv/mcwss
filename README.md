@@ -1,5 +1,5 @@
 # mcwss
-A package to run a websocket protocol server (documentation) for Minecraft Bedrock Edition in a Go program.
+A documentation and implementation of the Minecraft Bedrock Edition websocket protocol.
 
 ## Minecraft Websockets
 Minecraft has websocket connection commands that may be used to connect to a websocket server. These commands are `/connect` and `/wsserver`.
@@ -19,17 +19,25 @@ mcwss is a Go library. To use it, Go must be installed. The library may be downl
 
 ### Usage
 ```go
-// Create a new server using the default configuration. To use specific configuration, pass a *wss.Config{} in here.
-server := mcwss.NewServer(nil)
+package main
 
-server.OnConnection(func(player *mcwss.Player){
-  // Called when a player connects to the server.
-})
-server.OnDisconnection(func(player *mcwss.Player){
-  // Called when a player disconnects from the server.
-])
-// Run the server. (blocking)
-server.Run()
+import (
+	"github.com/sandertv/mcwss"
+)
+
+func main() {
+    // Create a new server using the default configuration. To use specific configuration, pass a *wss.Config{} in here.
+    server := mcwss.NewServer(nil)
+    
+    server.OnConnection(func(player *mcwss.Player){
+      // Called when a player connects to the server.
+    })
+    server.OnDisconnection(func(player *mcwss.Player){
+      // Called when a player disconnects from the server.
+    })
+    // Run the server. (blocking)
+    server.Run()
+}
 ```
 The server may now be connected to by joining a singleplayer game and executing the command `/connect localhost:8000/ws`.
 

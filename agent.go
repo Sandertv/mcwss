@@ -41,10 +41,10 @@ func (agent *Agent) Move(direction mctype.Direction, metres int) {
 
 // TurnRight turns the agent 90 degrees to the right.
 func (agent *Agent) TurnRight() {
-	agent.player.Exec("agent turn right", nil)
+	agent.player.Exec(command.AgentTurnRequest(mctype.Right), nil)
 }
 
 // TurnLeft turns the agent 90 degrees to the left.
 func (agent *Agent) TurnLeft() {
-	agent.player.Exec("agent turn left", nil)
+	agent.player.Exec(command.AgentTurnRequest(mctype.Left), nil)
 }

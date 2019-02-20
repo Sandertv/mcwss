@@ -4,9 +4,9 @@ package mctype
 type Target string
 
 const (
-	TargetAllPlayers    Target = "@a"
-	TargetAllEntities   Target = "@e"
-	TargetNearestPlayer Target = "@p"
-	TargetRandomPlayer  Target = "@r"
-	TargetSelf          Target = "@s"
+	AllPlayers    Target = "@a"
+	AllEntities   Target = "@e"
+	NearestPlayer Target = "@p"
+	RandomPlayer  Target = "@r"
+	Self          Target = "@s"
 )

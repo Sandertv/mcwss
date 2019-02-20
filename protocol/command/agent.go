@@ -15,6 +15,11 @@ func AgentMoveRequest(direction mctype.Direction) string {
 	return fmt.Sprintf("agent move %v", direction)
 }
 
+// AgentTurnRequest produces the command used to turn an agent. The direction must be either left or right.
+func AgentTurnRequest(direction mctype.Direction) string {
+	return fmt.Sprintf("agent turn %v", direction)
+}
+
 // AgentPosition is sent by the server to get the position of the agent of a player.
 type AgentPosition struct {
 	// YRotation is the rotation on the Y axis of the agent. (yaw) This is always a full number.

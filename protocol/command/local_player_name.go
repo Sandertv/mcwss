@@ -1,5 +1,12 @@
 package command
 
+import "fmt"
+
+// LocalPlayerNameRequest produces a command used to get the name of the player connected to a websocket.
+func LocalPlayerNameRequest() string {
+	return fmt.Sprintf("getlocalplayername")
+}
+
 // LocalPlayerName is sent by the server to find out the player name of the player connected to the websocket.
 // This command is executed automatically by the server and stored in a field of the Player struct.
 type LocalPlayerName struct {

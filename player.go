@@ -33,7 +33,7 @@ func NewPlayer(conn *websocket.Conn) *Player {
 		handlers:         make(map[event.Name]func(event interface{})),
 		commandCallbacks: make(map[string]reflect.Value),
 	}
-	player.Exec("getlocalplayername", func(response *command.LocalPlayerName) {
+	player.Exec(command.LocalPlayerNameRequest(), func(response *command.LocalPlayerName) {
 		player.name = response.LocalPlayerName
 	})
 	player.agent = NewAgent(player)

@@ -33,3 +33,5 @@ server.Run()
 ```
 The server may now be connected to by joining a singleplayer game and executing the command `/connect localhost:8000/ws`.
 
+### Documentation
+https://godoc.org/github.com/Sandertv/mcwss

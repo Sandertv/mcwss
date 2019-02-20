@@ -9,6 +9,8 @@ type ItemCrafted struct {
 	// UsedCraftingTable indicates if the player was using a crafting table to craft this item. If the
 	// inventory itself was used, this is false.
 	UsedCraftingTable bool
+	// CraftingSessionID is an ID identifying this crafting session.
+	CraftingSessionID int
 
 	// RecipeBookShown indicates if a player had its recipe book shown. If so, the fields below apply.
 	RecipeBookShown bool

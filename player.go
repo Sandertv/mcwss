@@ -94,6 +94,14 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 	})
 }
 
+// OnMobInteracted subscribes to events called when the player interacts with a mob, in a way that has
+// actually has a result.
+func (player *Player) OnMobInteracted(handler func(event *event.MobInteracted)) {
+	_ = player.subscribeTo(event.NameMobInteracted, func(e interface{}) {
+		handler(e.(*event.MobInteracted))
+	})
+}
+
 // OnEndOfDay subscribes to events called when the end of a day was reached naturally. (without commands)
 func (player *Player) OnEndOfDay(handler func(event *event.EndOfDay)) {
 	_ = player.subscribeTo(event.NameEndOfDay, func(e interface{}) {

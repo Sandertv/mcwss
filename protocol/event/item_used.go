@@ -3,13 +3,13 @@ package event
 const (
 	ItemEquipped = iota
 	ItemEaten
-	Unknown1
+	_
 	ItemDrunk
 	ItemThrown
 	ItemReleased
 	ItemBlockEntityCreated // This is sent when a music disk is put in a music box, when an item frame is
 	// placed, when a brewing stand is placed, but also when a cake is placed...
-	Unknown2
+	_
 	ItemBucketFilled
 	ItemBucketEmptied
 	ItemUsedOnBlock

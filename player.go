@@ -94,6 +94,30 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 	})
 }
 
+// OnStartWorld subscribes to events called when the player starts a world by clicking it in the main menu.
+// It includes both servers and singleplayer worlds. The event provides no information about the world.
+func (player *Player) OnStartWorld(handler func(event *event.StartWorld)) {
+	_ = player.subscribeTo(event.NameStartWorld, func(e interface{}) {
+		handler(e.(*event.StartWorld))
+	})
+}
+
+// OnWorldLoaded subscribes to events called when the player loads a world. This happens both when joining
+// servers and singleplayer worlds, and happens directly after the StartGamePacket is called. The event
+// supplies some of the data of this packet.
+func (player *Player) OnWorldLoaded(handler func(event *event.WorldLoaded)) {
+	_ = player.subscribeTo(event.NameWorldLoaded, func(e interface{}) {
+		handler(e.(*event.WorldLoaded))
+	})
+}
+
+// OnWorldGenerated subscribes to events called when a player generates a new singleplayer world.
+func (player *Player) OnWorldGenerated(handler func(event *event.WorldGenerated)) {
+	_ = player.subscribeTo(event.NameWorldGenerated, func(e interface{}) {
+		handler(e.(*event.WorldGenerated))
+	})
+}
+
 // OnMobInteracted subscribes to events called when the player interacts with a mob, in a way that has
 // actually has a result.
 func (player *Player) OnMobInteracted(handler func(event *event.MobInteracted)) {

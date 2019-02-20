@@ -16,6 +16,9 @@ const (
 	NameBookEdited       Name = "BookEdited"
 	NameSignedBookOpened Name = "SignedBookOpened"
 	NameMobInteracted    Name = "MobInteracted"
+	NameStartWorld       Name = "StartWorld"
+	NameWorldLoaded      Name = "WorldLoaded"
+	NameWorldGenerated   Name = "WorldGenerated"
 )
 
 // Events is a map used to find the corresponding event for an event name.
@@ -32,4 +35,7 @@ var Events = map[Name]interface{}{
 	NameBookEdited:       &BookEdited{},
 	NameSignedBookOpened: &SignedBookOpened{},
 	NameMobInteracted:    &MobInteracted{},
+	NameStartWorld:       &StartWorld{},
+	NameWorldLoaded:      &WorldLoaded{},
+	NameWorldGenerated:   &WorldGenerated{},
 }

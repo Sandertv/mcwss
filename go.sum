@@ -2,5 +2,3 @@ github.com/google/uuid v1.1.0 h1:Jf4mxPC/ziBnoPIdpQdPJ9OeiomAUHLvxmPRSPH9m4s=
 github.com/google/uuid v1.1.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=
 github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
-github.com/sandertv/mcwss v0.0.0-20190220131544-187a1f4ea246 h1:fW/HHAk9KJvI0wP4S94gejZYEABN4e4KoazLtmuIvW4=
-github.com/sandertv/mcwss v0.0.0-20190220131544-187a1f4ea246/go.mod h1:dyhScAA+m2IC+wYMuHlKyYIzt1DHN11qMXDMKYsdHv4=

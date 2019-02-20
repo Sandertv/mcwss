@@ -14,8 +14,8 @@ func ChunkDataRequest(dimension string, chunkX, chunkZ int, maxY int) string {
 	return fmt.Sprintf("getchunkdata %v %v %v %v", dimension, chunkX, chunkZ, maxY)
 }
 
-// ChunkData is sent by the server to receive a string of chunk data containing information about the top
-// blocks in the chunk, such as colours, block types etc.
+// ChunkData is sent by the server to receive a string of chunk data of the highest blocks in a chunk,
+// containing an RGB-24 colour of the blocks and their heights.
 type ChunkData struct {
 	// Data is a string of data, with the data being joined with commas. The string has some methods to make
 	// consume less space. The Data string is ordered in XZ order. Multiple blocks after each other result in

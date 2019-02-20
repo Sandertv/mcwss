@@ -9,5 +9,7 @@ type Position struct {
 
 // BlockPosition is the position of a block in a 3D world.
 type BlockPosition struct {
-	X, Y, Z int
+	X int `json:"x"`
+	Y int `json:"y"`
+	Z int `json:"z"`
 }

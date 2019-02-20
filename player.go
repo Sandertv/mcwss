@@ -28,8 +28,8 @@ type Player struct {
 // NewPlayer returns an initialised player for a websocket connection.
 func NewPlayer(conn *websocket.Conn) *Player {
 	player := &Player{
-		connected:        true,
 		Conn:             conn,
+		connected:        true,
 		handlers:         make(map[event.Name]func(event interface{})),
 		commandCallbacks: make(map[string]reflect.Value),
 	}

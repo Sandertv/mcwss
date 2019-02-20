@@ -1,6 +1,14 @@
 package command
 
-import "github.com/sandertv/mcwss/mctype"
+import (
+	"fmt"
+	"github.com/sandertv/mcwss/mctype"
+)
+
+// QueryTargetRequest produces the command used to query information about a target.
+func QueryTargetRequest(target mctype.Target) string {
+	return fmt.Sprintf("querytarget %v", target)
+}
 
 // QueryTarget is sent by the server to find out information about entities in the world, in particular the
 // position related information.

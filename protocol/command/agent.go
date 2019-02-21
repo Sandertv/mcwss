@@ -20,6 +20,11 @@ func AgentTurnRequest(direction mctype.Direction) string {
 	return fmt.Sprintf("agent turn %v", direction)
 }
 
+// AgentAttackRequest produces the command used to make an agent attack.
+func AgentAttackRequest(direction mctype.Direction) string {
+	return fmt.Sprintf("agent attack %v", direction)
+}
+
 // AgentPosition is sent by the server to get the position of the agent of a player.
 type AgentPosition struct {
 	// YRotation is the rotation on the Y axis of the agent. (yaw) This is always a full number.
@@ -32,14 +37,20 @@ type AgentPosition struct {
 	StatusMessage string `json:"statusMessage"`
 }
 
-// AgentMove is sent by the server to move the agent of a player.
-type AgentMove struct {
+// AgentInstruction is a shared structure for agent commands that instruct the agent to do an action.
+type AgentInstruction struct {
 	// StatusCode is the status code of the command. 0 on success.
 	StatusCode int `json:"statusCode"`
 	// StatusMessage indicates if the command was successful with a message.
 	StatusMessage string `json:"statusMessage"`
 }
 
+// AgentMove is sent by the server to move the agent of a player.
+type AgentMove AgentInstruction
+
 // AgentTurn is sent by the server to turn the agent of a player. The fields are the same as those of the
 // AgentMove response.
-type AgentTurn AgentMove
+type AgentTurn AgentInstruction
+
+// AgentAttack is sent by the server to make the agent of a player attack in a direction.
+type AgentAttack AgentInstruction

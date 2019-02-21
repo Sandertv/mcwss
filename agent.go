@@ -48,3 +48,8 @@ func (agent *Agent) TurnRight() {
 func (agent *Agent) TurnLeft() {
 	agent.player.Exec(command.AgentTurnRequest(mctype.Left), nil)
 }
+
+// Attack makes the agent attack up to one block in a given direction.
+func (agent *Agent) Attack(direction mctype.Direction) {
+	agent.player.Exec(command.AgentAttackRequest(direction), nil)
+}

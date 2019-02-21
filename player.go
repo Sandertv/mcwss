@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/sandertv/mcwss/mctype"
 	"github.com/sandertv/mcwss/protocol"
 	"github.com/sandertv/mcwss/protocol/command"
 	"github.com/sandertv/mcwss/protocol/event"
 	"log"
 	"reflect"
+	"strings"
 )
 
 // Player is a player connected to the websocket server.
@@ -48,6 +50,19 @@ func (player *Player) Name() string {
 // Agent returns the controllable agent entity of the player.
 func (player *Player) Agent() *Agent {
 	return player.agent
+}
+
+// SendMessage sends a variadic amount of messages to a player, with each message ending on a different line.
+// The messages are first processed to make sure they were valid strings, after which the player is sent the
+// message.
+func (player *Player) SendMessage(messages ...string) {
+	for i, message := range messages {
+		message = strings.Replace(message, `\`, `\\`, -1)
+		message = strings.Replace(message, `'`, `\'`, -1)
+		message = strings.Replace(message, `"`, `\"`, -1)
+		messages[i] = message
+	}
+	player.Exec(command.TellRawRequest(mctype.Target(player.name), messages...), nil)
 }
 
 // Connected checks if a player is currently connected. If not, the reference to this player should be

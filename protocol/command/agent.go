@@ -25,6 +25,21 @@ func AgentAttackRequest(direction mctype.Direction) string {
 	return fmt.Sprintf("agent attack %v", direction)
 }
 
+// AgentPlaceRequest produces the command used to make an agent place the block in slot 0 of its inventory.
+func AgentPlaceRequest(direction mctype.Direction) string {
+	return fmt.Sprintf("agent place %v", direction)
+}
+
+// AgentDestroyRequest produces a command used to make an agent destroy a block in a direction.
+func AgentDestroyRequest(direction mctype.Direction) string {
+	return fmt.Sprintf("agent destroy %v", direction)
+}
+
+// AgentTillRequest produces a command used to make an agent till a dirt-like block in a direction.
+func AgentTillRequest(direction mctype.Direction) string {
+	return fmt.Sprintf("agent till %v", direction)
+}
+
 // AgentPosition is sent by the server to get the position of the agent of a player.
 type AgentPosition struct {
 	// YRotation is the rotation on the Y axis of the agent. (yaw) This is always a full number.
@@ -54,3 +69,13 @@ type AgentTurn AgentInstruction
 
 // AgentAttack is sent by the server to make the agent of a player attack in a direction.
 type AgentAttack AgentInstruction
+
+// AgentPlace is sent by the server to make the agent of a player place a block in a direction.
+type AgentPlace AgentInstruction
+
+// AgentDestroy is sent by the server to make the agent of a player destroy a block in a direction.
+type AgentDestroy AgentInstruction
+
+// AgentTill is sent by the server to make the agent of a player till a block in a direction. In non-edu mode,
+// this action seems not to work.
+type AgentTill AgentInstruction

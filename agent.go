@@ -53,3 +53,20 @@ func (agent *Agent) TurnLeft() {
 func (agent *Agent) Attack(direction mctype.Direction) {
 	agent.player.Exec(command.AgentAttackRequest(direction), nil)
 }
+
+// PlaceHeldItem makes the agent place its held item, provided it is a block, in a given direction.
+func (agent *Agent) PlaceHeldItem(direction mctype.Direction) {
+	agent.player.Exec(command.AgentPlaceRequest(direction), nil)
+}
+
+// DestroyBlock makes the agent destroy a block in a direction. The agent can break any block, regardless of
+// whether the block is breakable in survival mode or not. Bedrock, water etc. can be broken.
+func (agent *Agent) DestroyBlock(direction mctype.Direction) {
+	agent.player.Exec(command.AgentDestroyRequest(direction), nil)
+}
+
+// TillBlock makes the agent till a block in a given direction using a hoe. Tilling does not appear to work
+// in non-edu mode, and seems to often crash the game instead.
+func (agent *Agent) TillBlock(direction mctype.Direction) {
+	agent.player.Exec(command.AgentTillRequest(direction), nil)
+}

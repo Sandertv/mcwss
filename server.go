@@ -71,12 +71,18 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 	server.connectionFunc(player)
 
 	defer func() {
+		// Unsubscribe from all events. The client keeps sending events to the websocket server, even after
+		// reconnecting. The client needs to either close the game, or we need to unsubscribe it from all
+		// events in order to stop receiving them the next session.
+		player.UnsubscribeFromAll()
+
 		server.disconnectionFunc(player)
+		delete(server.players, player)
+		player.connected = false
+
 		if err := ws.Close(); err != nil {
 			log.Panicf("error closing websocket connection: %v", err)
 		}
-		delete(server.players, player)
-		player.connected = false
 	}()
 
 	for {

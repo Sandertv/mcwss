@@ -226,6 +226,13 @@ func (player *Player) CloseConnection() {
 	player.Exec("closewebsocket", nil)
 }
 
+// UnsubscribeFromAll unsubscribes from all events previously listened on. No more events will be received.
+func (player *Player) UnsubscribeFromAll() {
+	for eventName := range player.handlers {
+		player.UnsubscribeFrom(eventName)
+	}
+}
+
 // UnsubscribeFrom unsubscribes from events with the event name passed. The handler used to handle the event
 // will no longer be called.
 func (player *Player) UnsubscribeFrom(eventName event.Name) {

@@ -37,7 +37,7 @@ type ChunkData struct {
 // ParseChunkData parses a chunk data string from a ChunkData struct. The values returned are RGB values
 // ordered in XZ order, and a byte slice of the heights, ordered in the same order.
 // If not successful, an error is returned.
-func ParseChunkData(data string) ([]color.RGBA, []byte, error) {
+func ParseChunkData(data string) (colourMap []color.RGBA, heightMap []byte, err error) {
 	// 16x16 blocks on a chunk layer.
 	values := make([]string, 0, 256)
 

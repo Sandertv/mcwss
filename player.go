@@ -97,7 +97,7 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 // OnStartWorld subscribes to events called when the player starts a world by clicking it in the main menu.
 // It includes both servers and singleplayer worlds. The event provides no information about the world.
 func (player *Player) OnStartWorld(handler func(event *event.StartWorld)) {
-	_ = player.subscribeTo(event.NameStartWorld, func(e interface{}) {
+	player.subscribeTo(event.NameStartWorld, func(e interface{}) {
 		handler(e.(*event.StartWorld))
 	})
 }
@@ -106,14 +106,14 @@ func (player *Player) OnStartWorld(handler func(event *event.StartWorld)) {
 // servers and singleplayer worlds, and happens directly after the StartGamePacket is called. The event
 // supplies some of the data of this packet.
 func (player *Player) OnWorldLoaded(handler func(event *event.WorldLoaded)) {
-	_ = player.subscribeTo(event.NameWorldLoaded, func(e interface{}) {
+	player.subscribeTo(event.NameWorldLoaded, func(e interface{}) {
 		handler(e.(*event.WorldLoaded))
 	})
 }
 
 // OnWorldGenerated subscribes to events called when a player generates a new singleplayer world.
 func (player *Player) OnWorldGenerated(handler func(event *event.WorldGenerated)) {
-	_ = player.subscribeTo(event.NameWorldGenerated, func(e interface{}) {
+	player.subscribeTo(event.NameWorldGenerated, func(e interface{}) {
 		handler(e.(*event.WorldGenerated))
 	})
 }
@@ -121,77 +121,77 @@ func (player *Player) OnWorldGenerated(handler func(event *event.WorldGenerated)
 // OnMobInteracted subscribes to events called when the player interacts with a mob, in a way that has
 // actually has a result.
 func (player *Player) OnMobInteracted(handler func(event *event.MobInteracted)) {
-	_ = player.subscribeTo(event.NameMobInteracted, func(e interface{}) {
+	player.subscribeTo(event.NameMobInteracted, func(e interface{}) {
 		handler(e.(*event.MobInteracted))
 	})
 }
 
 // OnEndOfDay subscribes to events called when the end of a day was reached naturally. (without commands)
 func (player *Player) OnEndOfDay(handler func(event *event.EndOfDay)) {
-	_ = player.subscribeTo(event.NameEndOfDay, func(e interface{}) {
+	player.subscribeTo(event.NameEndOfDay, func(e interface{}) {
 		handler(e.(*event.EndOfDay))
 	})
 }
 
 // OnSignedBookOpened subscribes to signed books opened by the player.
 func (player *Player) OnSignedBookOpened(handler func(event *event.SignedBookOpened)) {
-	_ = player.subscribeTo(event.NameSignedBookOpened, func(e interface{}) {
+	player.subscribeTo(event.NameSignedBookOpened, func(e interface{}) {
 		handler(e.(*event.SignedBookOpened))
 	})
 }
 
 // OnBookEdited subscribes to edits by the player to a book after closing it.
 func (player *Player) OnBookEdited(handler func(event *event.BookEdited)) {
-	_ = player.subscribeTo(event.NameBookEdited, func(e interface{}) {
+	player.subscribeTo(event.NameBookEdited, func(e interface{}) {
 		handler(e.(*event.BookEdited))
 	})
 }
 
 // OnTransform subscribes to transformations done to the player, usually sent by means such as teleporting.
 func (player *Player) OnTransform(handler func(event *event.PlayerTransform)) {
-	_ = player.subscribeTo(event.NamePlayerTransform, func(e interface{}) {
+	player.subscribeTo(event.NamePlayerTransform, func(e interface{}) {
 		handler(e.(*event.PlayerTransform))
 	})
 }
 
 // OnTravelled subscribes to the player travelling to places.
 func (player *Player) OnTravelled(handler func(event *event.PlayerTravelled)) {
-	_ = player.subscribeTo(event.NamePlayerTravelled, func(e interface{}) {
+	player.subscribeTo(event.NamePlayerTravelled, func(e interface{}) {
 		handler(e.(*event.PlayerTravelled))
 	})
 }
 
 // OnItemUsed subscribes to items used by the player.
 func (player *Player) OnItemUsed(handler func(event *event.ItemUsed)) {
-	_ = player.subscribeTo(event.NameItemUsed, func(e interface{}) {
+	player.subscribeTo(event.NameItemUsed, func(e interface{}) {
 		handler(e.(*event.ItemUsed))
 	})
 }
 
 // OnItemInteracted subscribes to interactions made using items by the player.
 func (player *Player) OnItemInteracted(handler func(event *event.ItemInteracted)) {
-	_ = player.subscribeTo(event.NameItemInteracted, func(e interface{}) {
+	player.subscribeTo(event.NameItemInteracted, func(e interface{}) {
 		handler(e.(*event.ItemInteracted))
 	})
 }
 
 // OnItemCrafted subscribes to items crafted by the player.
 func (player *Player) OnItemCrafted(handler func(event *event.ItemCrafted)) {
-	_ = player.subscribeTo(event.NameItemCrafted, func(e interface{}) {
+	player.subscribeTo(event.NameItemCrafted, func(e interface{}) {
 		handler(e.(*event.ItemCrafted))
 	})
 }
 
 // OnBlockPlaced subscribes to blocks placed by the player.
 func (player *Player) OnBlockPlaced(handler func(event *event.BlockPlaced)) {
-	_ = player.subscribeTo(event.NameBlockPlaced, func(e interface{}) {
+	player.subscribeTo(event.NameBlockPlaced, func(e interface{}) {
 		handler(e.(*event.BlockPlaced))
 	})
 }
 
 // OnBlockBroken subscribes to blocks broken by the player.
 func (player *Player) OnBlockBroken(handler func(event *event.BlockBroken)) {
-	_ = player.subscribeTo(event.NameBlockBroken, func(e interface{}) {
+	player.subscribeTo(event.NameBlockBroken, func(e interface{}) {
 		handler(e.(*event.BlockBroken))
 	})
 }
@@ -200,7 +200,7 @@ func (player *Player) OnBlockBroken(handler func(event *event.BlockBroken)) {
 // is called both when the player chats and when the player receives its own chat, resulting in a duplicate
 // event when the player chats.
 func (player *Player) OnPlayerMessage(handler func(event *event.PlayerMessage)) {
-	_ = player.subscribeTo(event.NamePlayerMessage, func(e interface{}) {
+	player.subscribeTo(event.NamePlayerMessage, func(e interface{}) {
 		handler(e.(*event.PlayerMessage))
 	})
 }
@@ -213,22 +213,16 @@ func (player *Player) CloseConnection() {
 
 // UnsubscribeFrom unsubscribes from events with the event name passed. The handler used to handle the event
 // will no longer be called.
-func (player *Player) UnsubscribeFrom(eventName event.Name) error {
-	if err := player.WriteJSON(protocol.NewEventRequest(eventName, protocol.Unsubscribe)); err != nil {
-		return fmt.Errorf("error writing event unsubscribe request: %v", err)
-	}
+func (player *Player) UnsubscribeFrom(eventName event.Name) {
+	_ = player.WriteJSON(protocol.NewEventRequest(eventName, protocol.Unsubscribe))
 	delete(player.handlers, eventName)
-	return nil
 }
 
 // subscribeTo subscribes to an arbitrary event. It is recommended to use the methods to listen specifically
 // to events above.
-func (player *Player) subscribeTo(eventName event.Name, handler func(event interface{})) error {
+func (player *Player) subscribeTo(eventName event.Name, handler func(event interface{})) {
 	player.handlers[eventName] = handler
-	if err := player.WriteJSON(protocol.NewEventRequest(eventName, protocol.Subscribe)); err != nil {
-		return fmt.Errorf("error writing event subscribe request: %v", err)
-	}
-	return nil
+	_ = player.WriteJSON(protocol.NewEventRequest(eventName, protocol.Subscribe))
 }
 
 // handleIncomingPacket handles an incoming packet, processing in particular the body of the packet.

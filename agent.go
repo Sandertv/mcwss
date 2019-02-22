@@ -54,8 +54,8 @@ func (agent *Agent) Attack(direction mctype.Direction) {
 	agent.player.Exec(command.AgentAttackRequest(direction), nil)
 }
 
-// PlaceHeldItem makes the agent place its held item, provided it is a block, in a given direction.
-func (agent *Agent) PlaceHeldItem(direction mctype.Direction) {
+// UseHeldItem makes the agent place its held item, provided it is a block, in a given direction.
+func (agent *Agent) UseHeldItem(direction mctype.Direction) {
 	agent.player.Exec(command.AgentPlaceRequest(direction), nil)
 }
 

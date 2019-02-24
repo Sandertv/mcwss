@@ -2,7 +2,7 @@ package event
 
 // ItemCrafted is sent by the client when it crafts an item either in its inventory or in a crafting table.
 type ItemCrafted struct {
-	// Type is the numerical type of an item. For wooden planks for example, this is 5.
+	// Type is the numerical type of the crafted item. For wooden planks for example, this is 5.
 	Type int
 	// AuxType is the metadata or variant of the item. For oak wooden planks for example, this is 0.
 	AuxType int

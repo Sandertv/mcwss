@@ -10,7 +10,6 @@ import (
 	"github.com/sandertv/mcwss/protocol/event"
 	"log"
 	"reflect"
-	"strings"
 )
 
 // Player is a player connected to the websocket server.
@@ -22,6 +21,7 @@ type Player struct {
 	event.Properties
 
 	agent *Agent
+	world *World
 
 	handlers         map[event.Name]func(event interface{})
 	commandCallbacks map[string]reflect.Value
@@ -39,6 +39,7 @@ func NewPlayer(conn *websocket.Conn) *Player {
 		player.name = response.LocalPlayerName
 	})
 	player.agent = NewAgent(player)
+	player.world = NewWorld(player)
 	return player
 }
 
@@ -52,17 +53,22 @@ func (player *Player) Agent() *Agent {
 	return player.agent
 }
 
-// SendMessage sends a variadic amount of messages to a player, with each message ending on a different line.
-// The messages are first processed to make sure they were valid strings, after which the player is sent the
-// message.
-func (player *Player) SendMessage(messages ...string) {
-	for i, message := range messages {
-		message = strings.Replace(message, `\`, `\\`, -1)
-		message = strings.Replace(message, `'`, `\'`, -1)
-		message = strings.Replace(message, `"`, `\"`, -1)
-		messages[i] = message
-	}
-	player.Exec(command.TellRawRequest(mctype.Target(player.name), messages...), nil)
+// World returns the world of the player.
+func (player *Player) World() *World {
+	return player.world
+}
+
+// SendMessage sends a message that only the player receives. Its behaviour is synonymous with fmt.Sprintf(),
+// assuming all parameters are put into the string using the `%v` formatting mode.
+func (player *Player) SendMessage(message string, parameters ...interface{}) {
+	message = fmt.Sprintf(escapeMessage(message), parameters...)
+	player.Exec(command.TellRawRequest(mctype.Target(player.name), message), nil)
+}
+
+// Say broadcasts a message as the player to all players in the world of the player.
+func (player *Player) Say(message string, parameters ...interface{}) {
+	message = fmt.Sprintf(message, parameters...)
+	player.ExecAs(command.SayRequest(message), nil)
 }
 
 // Connected checks if a player is currently connected. If not, the reference to this player should be

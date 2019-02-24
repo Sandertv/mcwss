@@ -40,6 +40,9 @@ func NewPlayer(conn *websocket.Conn) *Player {
 	})
 	player.agent = NewAgent(player)
 	player.world = NewWorld(player)
+	player.subscribeTo("ScriptListenToEvent", func(event interface{}) {
+		fmt.Println(event)
+	})
 	return player
 }
 
@@ -112,6 +115,61 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 		}
 		code, _ := codeInterface.(int)
 		callback(code)
+	})
+}
+
+// OnScriptBroadcastEvent listens for scripts ran by the player that broadcast events. Due to the nature of
+// this event, scripts could send JSON objects as event to listen on to communicate with the websocket server
+// for interaction between the two.
+func (player *Player) OnScriptBroadcastEvent(handler func(event *event.ScriptBroadcastEvent)) {
+	player.subscribeTo(event.NameScriptBroadcastEvent, func(e interface{}) {
+		handler(e.(*event.ScriptBroadcastEvent))
+	})
+}
+
+// OnScriptError listens for 'non-critical' errors encountered in scripts ran by the player. These errors
+// generally have a very detailed error message.
+func (player *Player) OnScriptError(handler func(event *event.ScriptError)) {
+	player.subscribeTo(event.NameScriptError, func(e interface{}) {
+		handler(e.(*event.ScriptError))
+	})
+}
+
+// OnScriptGetComponent listens for scripts calling the getComponent method.
+func (player *Player) OnScriptGetComponent(handler func(event *event.ScriptGetComponent)) {
+	player.subscribeTo(event.NameScriptGetComponent, func(e interface{}) {
+		handler(e.(*event.ScriptGetComponent))
+	})
+}
+
+// OnScriptInternalError listens for 'critical' errors encountered during the initial loading of a script.
+// These errors often have a very vague error message, often pointing back to a syntax error or other critical
+// error found in the script.
+func (player *Player) OnScriptInternalError(handler func(event *event.ScriptInternalError)) {
+	player.subscribeTo(event.NameScriptInternalError, func(e interface{}) {
+		handler(e.(*event.ScriptInternalError))
+	})
+}
+
+// OnScriptListenToEvent listens for scripts ran by the client that start listening for events.
+func (player *Player) OnScriptListenToEvent(handler func(event *event.ScriptListenToEvent)) {
+	player.subscribeTo(event.NameScriptListenToEvent, func(e interface{}) {
+		handler(e.(*event.ScriptListenToEvent))
+	})
+}
+
+// OnScriptLoaded listens for scripts that are loaded by the player.
+func (player *Player) OnScriptLoaded(handler func(event *event.ScriptLoaded)) {
+	player.subscribeTo(event.NameScriptLoaded, func(e interface{}) {
+		handler(e.(*event.ScriptLoaded))
+	})
+}
+
+// OnScriptRan listens for scripts that are ran immediately after they are loaded. This event is called once
+// immediately hen the player spawns, even though the script might still be running after that.
+func (player *Player) OnScriptRan(handler func(event *event.ScriptRan)) {
+	player.subscribeTo(event.NameScriptRan, func(e interface{}) {
+		handler(e.(*event.ScriptRan))
 	})
 }
 

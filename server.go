@@ -60,7 +60,8 @@ func (server *Server) OnDisconnection(handler func(player *Player)) {
 func (server *Server) handleResponse(writer http.ResponseWriter, request *http.Request) {
 	ws, err := server.upgrader.Upgrade(writer, request, nil)
 	if err != nil {
-		log.Panicf("error upgrading request: %v", err)
+		log.Printf("error upgrading request: %v", err)
+		return
 	}
 
 	// Initialise the player and add it to the players map.

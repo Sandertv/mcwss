@@ -40,9 +40,6 @@ func NewPlayer(conn *websocket.Conn) *Player {
 	})
 	player.agent = NewAgent(player)
 	player.world = NewWorld(player)
-	player.subscribeTo("ScriptListenToEvent", func(event interface{}) {
-		fmt.Println(event)
-	})
 	return player
 }
 

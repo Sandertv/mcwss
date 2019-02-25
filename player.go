@@ -115,6 +115,14 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 	})
 }
 
+// OnScreenChanged listens for the screen of the player being changed. Note that this is not sent every time
+// anything is changed on the screen, but rather when a player switches to a completely different screen.
+func (player *Player) OnScreenChanged(handler func(event *event.ScreenChanged)) {
+	player.subscribeTo(event.NameScreenChanged, func(e interface{}) {
+		handler(e.(*event.ScreenChanged))
+	})
+}
+
 // OnScriptBroadcastEvent listens for scripts ran by the player that broadcast events. Due to the nature of
 // this event, scripts could send JSON objects as event to listen on to communicate with the websocket server
 // for interaction between the two.

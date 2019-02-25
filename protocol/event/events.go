@@ -26,6 +26,7 @@ const (
 	NameScriptListenToEvent  Name = "ScriptListenToEvent"
 	NameScriptLoaded         Name = "ScriptLoaded"
 	NameScriptRan            Name = "ScriptRan"
+	NameScreenChanged        Name = "ScreenChanged"
 )
 
 // Events is a map used to find the corresponding event for an event name.
@@ -52,4 +53,5 @@ var Events = map[Name]interface{}{
 	NameScriptListenToEvent:  &ScriptListenToEvent{},
 	NameScriptLoaded:         &ScriptLoaded{},
 	NameScriptRan:            &ScriptRan{},
+	NameScreenChanged:        &ScreenChanged{},
 }

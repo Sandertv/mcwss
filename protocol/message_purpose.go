@@ -19,4 +19,5 @@ var Packets = map[MessagePurpose]interface{}{
 	Event:       &EventResponse{},
 	Error:       &ErrorResponse{},
 	Response:    &CommandResponse{},
+	Command:     &CommandRequest{},
 }

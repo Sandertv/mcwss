@@ -70,6 +70,6 @@ type ScreenChanged struct {
 	// Seconds is a float describing how long the previous screen was open for.
 	Seconds float64
 	// Timestamp is a timestamp indicating the time the screen was changed relative to the time the player
-	// joined the world it is currently in.
+	// opened the game.
 	Timestamp float64
 }

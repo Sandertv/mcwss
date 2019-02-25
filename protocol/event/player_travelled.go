@@ -31,10 +31,8 @@ type PlayerTravelled struct {
 	// HasRelevantBuff specifies if a player has an effect that affects its movement, such as slowness, jump
 	// boost, slow falling etc.
 	HasRelevantBuff bool
-	// MobType and NetworkType are both filled out with 0. They no longer seem to be valid, nor do they seem
-	// to apply to the event.
-	MobType     int
-	NetworkType int
+	// MobType no longer seems to be used. It appears always to be 0.
+	MobType int
 }
 
 // ConsumeMeasurements takes the movement measurements from the Measurements struct.

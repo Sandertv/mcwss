@@ -74,7 +74,7 @@ func ParseChunkData(data string) (colourMap []color.RGBA, heightMap []byte, err 
 		if err != nil {
 			return nil, nil, err
 		}
-		// Little endian ordered RGBA.
+		// Little endian ordered RGB.
 		rgba = append(rgba, color.RGBA{B: slice[0], G: slice[1], R: slice[2]})
 		heights = append(heights, slice[3])
 	}

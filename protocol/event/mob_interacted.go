@@ -17,7 +17,7 @@ const (
 	InteractUnleash
 	_
 	_
-	InteractToggleSitting = 16
+	InteractToggleSitting
 )
 
 // MobInteracted is sent when a player interacts with a mob in a way that activates something. Simply right

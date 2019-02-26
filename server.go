@@ -68,9 +68,6 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 	player := NewPlayer(ws)
 	server.players[player] = true
 
-	// Allow the creator of the server to interact with the new player.
-	server.connectionFunc(player)
-
 	defer func() {
 		// Unsubscribe from all events. The client keeps sending events to the websocket server, even after
 		// reconnecting. The client needs to either close the game, or we need to unsubscribe it from all
@@ -87,6 +84,8 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 	}()
 
 	for {
+		nameBefore := player.name
+
 		msgType, payload, err := ws.ReadMessage()
 		if err != nil {
 			log.Printf("error reading message from connection: %v", err)
@@ -126,6 +125,10 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 		if err := player.handleIncomingPacket(*packet); err != nil {
 			log.Printf("%v (payload: %v)", err, string(payload))
 			break
+		}
+		if nameBefore == "" {
+			// Allow the creator of the server to interact with the new player.
+			server.connectionFunc(player)
 		}
 	}
 }

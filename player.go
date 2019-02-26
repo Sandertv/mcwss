@@ -137,7 +137,7 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 // OnSlashCommandExecuted listens for commands executed by a player that actually existed. Unknown commands do
 // not result in this event being called.
 func (player *Player) OnSlashCommandExecuted(handler func(event *event.SlashCommandExecuted)) {
-	player.subscribeTo(event.NameSlashCommandExecuted, func(e interface{}) {
+	player.on(event.NameSlashCommandExecuted, func(e interface{}) {
 		handler(e.(*event.SlashCommandExecuted))
 	})
 }
@@ -145,7 +145,7 @@ func (player *Player) OnSlashCommandExecuted(handler func(event *event.SlashComm
 // OnScreenChanged listens for the screen of the player being changed. Note that this is not sent every time
 // anything is changed on the screen, but rather when a player switches to a completely different screen.
 func (player *Player) OnScreenChanged(handler func(event *event.ScreenChanged)) {
-	player.subscribeTo(event.NameScreenChanged, func(e interface{}) {
+	player.on(event.NameScreenChanged, func(e interface{}) {
 		handler(e.(*event.ScreenChanged))
 	})
 }
@@ -154,7 +154,7 @@ func (player *Player) OnScreenChanged(handler func(event *event.ScreenChanged)) 
 // this event, scripts could send JSON objects as event to listen on to communicate with the websocket server
 // for interaction between the two.
 func (player *Player) OnScriptBroadcastEvent(handler func(event *event.ScriptBroadcastEvent)) {
-	player.subscribeTo(event.NameScriptBroadcastEvent, func(e interface{}) {
+	player.on(event.NameScriptBroadcastEvent, func(e interface{}) {
 		handler(e.(*event.ScriptBroadcastEvent))
 	})
 }
@@ -162,14 +162,14 @@ func (player *Player) OnScriptBroadcastEvent(handler func(event *event.ScriptBro
 // OnScriptError listens for 'non-critical' errors encountered in scripts ran by the player. These errors
 // generally have a very detailed error message.
 func (player *Player) OnScriptError(handler func(event *event.ScriptError)) {
-	player.subscribeTo(event.NameScriptError, func(e interface{}) {
+	player.on(event.NameScriptError, func(e interface{}) {
 		handler(e.(*event.ScriptError))
 	})
 }
 
 // OnScriptGetComponent listens for scripts calling the getComponent method.
 func (player *Player) OnScriptGetComponent(handler func(event *event.ScriptGetComponent)) {
-	player.subscribeTo(event.NameScriptGetComponent, func(e interface{}) {
+	player.on(event.NameScriptGetComponent, func(e interface{}) {
 		handler(e.(*event.ScriptGetComponent))
 	})
 }
@@ -178,21 +178,21 @@ func (player *Player) OnScriptGetComponent(handler func(event *event.ScriptGetCo
 // These errors often have a very vague error message, often pointing back to a syntax error or other critical
 // error found in the script.
 func (player *Player) OnScriptInternalError(handler func(event *event.ScriptInternalError)) {
-	player.subscribeTo(event.NameScriptInternalError, func(e interface{}) {
+	player.on(event.NameScriptInternalError, func(e interface{}) {
 		handler(e.(*event.ScriptInternalError))
 	})
 }
 
 // OnScriptListenToEvent listens for scripts ran by the client that start listening for events.
 func (player *Player) OnScriptListenToEvent(handler func(event *event.ScriptListenToEvent)) {
-	player.subscribeTo(event.NameScriptListenToEvent, func(e interface{}) {
+	player.on(event.NameScriptListenToEvent, func(e interface{}) {
 		handler(e.(*event.ScriptListenToEvent))
 	})
 }
 
 // OnScriptLoaded listens for scripts that are loaded by the player.
 func (player *Player) OnScriptLoaded(handler func(event *event.ScriptLoaded)) {
-	player.subscribeTo(event.NameScriptLoaded, func(e interface{}) {
+	player.on(event.NameScriptLoaded, func(e interface{}) {
 		handler(e.(*event.ScriptLoaded))
 	})
 }
@@ -200,7 +200,7 @@ func (player *Player) OnScriptLoaded(handler func(event *event.ScriptLoaded)) {
 // OnScriptRan listens for scripts that are ran immediately after they are loaded. This event is called once
 // immediately hen the player spawns, even though the script might still be running after that.
 func (player *Player) OnScriptRan(handler func(event *event.ScriptRan)) {
-	player.subscribeTo(event.NameScriptRan, func(e interface{}) {
+	player.on(event.NameScriptRan, func(e interface{}) {
 		handler(e.(*event.ScriptRan))
 	})
 }
@@ -208,7 +208,7 @@ func (player *Player) OnScriptRan(handler func(event *event.ScriptRan)) {
 // OnStartWorld subscribes to events called when the player starts a world by clicking it in the main menu.
 // It includes both servers and singleplayer worlds. The event provides no information about the world.
 func (player *Player) OnStartWorld(handler func(event *event.StartWorld)) {
-	player.subscribeTo(event.NameStartWorld, func(e interface{}) {
+	player.on(event.NameStartWorld, func(e interface{}) {
 		handler(e.(*event.StartWorld))
 	})
 }
@@ -217,14 +217,14 @@ func (player *Player) OnStartWorld(handler func(event *event.StartWorld)) {
 // servers and singleplayer worlds, and happens directly after the StartGamePacket is called. The event
 // supplies some of the data of this packet.
 func (player *Player) OnWorldLoaded(handler func(event *event.WorldLoaded)) {
-	player.subscribeTo(event.NameWorldLoaded, func(e interface{}) {
+	player.on(event.NameWorldLoaded, func(e interface{}) {
 		handler(e.(*event.WorldLoaded))
 	})
 }
 
 // OnWorldGenerated subscribes to events called when a player generates a new singleplayer world.
 func (player *Player) OnWorldGenerated(handler func(event *event.WorldGenerated)) {
-	player.subscribeTo(event.NameWorldGenerated, func(e interface{}) {
+	player.on(event.NameWorldGenerated, func(e interface{}) {
 		handler(e.(*event.WorldGenerated))
 	})
 }
@@ -232,77 +232,77 @@ func (player *Player) OnWorldGenerated(handler func(event *event.WorldGenerated)
 // OnMobInteracted subscribes to events called when the player interacts with a mob, in a way that has
 // actually has a result.
 func (player *Player) OnMobInteracted(handler func(event *event.MobInteracted)) {
-	player.subscribeTo(event.NameMobInteracted, func(e interface{}) {
+	player.on(event.NameMobInteracted, func(e interface{}) {
 		handler(e.(*event.MobInteracted))
 	})
 }
 
 // OnEndOfDay subscribes to events called when the end of a day was reached naturally. (without commands)
 func (player *Player) OnEndOfDay(handler func(event *event.EndOfDay)) {
-	player.subscribeTo(event.NameEndOfDay, func(e interface{}) {
+	player.on(event.NameEndOfDay, func(e interface{}) {
 		handler(e.(*event.EndOfDay))
 	})
 }
 
 // OnSignedBookOpened subscribes to signed books opened by the player.
 func (player *Player) OnSignedBookOpened(handler func(event *event.SignedBookOpened)) {
-	player.subscribeTo(event.NameSignedBookOpened, func(e interface{}) {
+	player.on(event.NameSignedBookOpened, func(e interface{}) {
 		handler(e.(*event.SignedBookOpened))
 	})
 }
 
 // OnBookEdited subscribes to edits by the player to a book after closing it.
 func (player *Player) OnBookEdited(handler func(event *event.BookEdited)) {
-	player.subscribeTo(event.NameBookEdited, func(e interface{}) {
+	player.on(event.NameBookEdited, func(e interface{}) {
 		handler(e.(*event.BookEdited))
 	})
 }
 
 // OnTransform subscribes to transformations done to the player, usually sent by means such as teleporting.
 func (player *Player) OnTransform(handler func(event *event.PlayerTransform)) {
-	player.subscribeTo(event.NamePlayerTransform, func(e interface{}) {
+	player.on(event.NamePlayerTransform, func(e interface{}) {
 		handler(e.(*event.PlayerTransform))
 	})
 }
 
 // OnTravelled subscribes to the player travelling to places.
 func (player *Player) OnTravelled(handler func(event *event.PlayerTravelled)) {
-	player.subscribeTo(event.NamePlayerTravelled, func(e interface{}) {
+	player.on(event.NamePlayerTravelled, func(e interface{}) {
 		handler(e.(*event.PlayerTravelled))
 	})
 }
 
 // OnItemUsed subscribes to items used by the player.
 func (player *Player) OnItemUsed(handler func(event *event.ItemUsed)) {
-	player.subscribeTo(event.NameItemUsed, func(e interface{}) {
+	player.on(event.NameItemUsed, func(e interface{}) {
 		handler(e.(*event.ItemUsed))
 	})
 }
 
 // OnItemInteracted subscribes to interactions made using items by the player.
 func (player *Player) OnItemInteracted(handler func(event *event.ItemInteracted)) {
-	player.subscribeTo(event.NameItemInteracted, func(e interface{}) {
+	player.on(event.NameItemInteracted, func(e interface{}) {
 		handler(e.(*event.ItemInteracted))
 	})
 }
 
 // OnItemCrafted subscribes to items crafted by the player.
 func (player *Player) OnItemCrafted(handler func(event *event.ItemCrafted)) {
-	player.subscribeTo(event.NameItemCrafted, func(e interface{}) {
+	player.on(event.NameItemCrafted, func(e interface{}) {
 		handler(e.(*event.ItemCrafted))
 	})
 }
 
 // OnBlockPlaced subscribes to blocks placed by the player.
 func (player *Player) OnBlockPlaced(handler func(event *event.BlockPlaced)) {
-	player.subscribeTo(event.NameBlockPlaced, func(e interface{}) {
+	player.on(event.NameBlockPlaced, func(e interface{}) {
 		handler(e.(*event.BlockPlaced))
 	})
 }
 
 // OnBlockBroken subscribes to blocks broken by the player.
 func (player *Player) OnBlockBroken(handler func(event *event.BlockBroken)) {
-	player.subscribeTo(event.NameBlockBroken, func(e interface{}) {
+	player.on(event.NameBlockBroken, func(e interface{}) {
 		handler(e.(*event.BlockBroken))
 	})
 }
@@ -311,7 +311,7 @@ func (player *Player) OnBlockBroken(handler func(event *event.BlockBroken)) {
 // is called both when the player chats and when the player receives its own chat, resulting in a duplicate
 // event when the player chats.
 func (player *Player) OnPlayerMessage(handler func(event *event.PlayerMessage)) {
-	player.subscribeTo(event.NamePlayerMessage, func(e interface{}) {
+	player.on(event.NamePlayerMessage, func(e interface{}) {
 		handler(e.(*event.PlayerMessage))
 	})
 }
@@ -336,9 +336,9 @@ func (player *Player) UnsubscribeFrom(eventName event.Name) {
 	delete(player.handlers, eventName)
 }
 
-// subscribeTo subscribes to an arbitrary event. It is recommended to use the methods to listen specifically
-// to events above.
-func (player *Player) subscribeTo(eventName event.Name, handler func(event interface{})) {
+// on subscribes to an arbitrary event. It is recommended to use the methods to listen specifically to events
+// above.
+func (player *Player) on(eventName event.Name, handler func(event interface{})) {
 	player.handlers[eventName] = handler
 	_ = player.WriteJSON(protocol.NewEventRequest(eventName, protocol.Subscribe))
 }

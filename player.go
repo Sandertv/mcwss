@@ -134,6 +134,14 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 	})
 }
 
+// OnSlashCommandExecuted listens for commands executed by a player that actually existed. Unknown commands do
+// not result in this event being called.
+func (player *Player) OnSlashCommandExecuted(handler func(event *event.SlashCommandExecuted)) {
+	player.subscribeTo(event.NameSlashCommandExecuted, func(e interface{}) {
+		handler(e.(*event.SlashCommandExecuted))
+	})
+}
+
 // OnScreenChanged listens for the screen of the player being changed. Note that this is not sent every time
 // anything is changed on the screen, but rather when a player switches to a completely different screen.
 func (player *Player) OnScreenChanged(handler func(event *event.ScreenChanged)) {

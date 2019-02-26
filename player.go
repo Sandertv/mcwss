@@ -59,10 +59,19 @@ func (player *Player) World() *World {
 }
 
 // SendMessage sends a message that only the player receives. Its behaviour is synonymous with fmt.Sprintf(),
-// assuming all parameters are put into the string using the `%v` formatting mode.
+// putting all parameters in the string using formatting identifiers.
 func (player *Player) SendMessage(message string, parameters ...interface{}) {
 	message = fmt.Sprintf(escapeMessage(message), parameters...)
 	player.Exec(command.TellRawRequest(mctype.Target(player.name), message), nil)
+}
+
+// Tell tells the player a private message. Its behaviour is synonymous with fmt.Sprintf(), putting all
+// parameters in the string using formatting identifiers.
+func (player *Player) Tell(message string, parameters ...interface{}) {
+	message = fmt.Sprintf(message, parameters)
+	player.Exec(command.TellRequest(mctype.Target(player.name), message), func(ret map[string]interface{}) {
+		fmt.Println(ret)
+	})
 }
 
 // Say broadcasts a message as the player to all players in the world of the player.
@@ -111,7 +120,9 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 			return
 		}
 		code, _ := codeInterface.(int)
-		callback(code)
+		if callback != nil {
+			callback(code)
+		}
 	})
 }
 

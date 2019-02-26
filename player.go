@@ -69,9 +69,7 @@ func (player *Player) SendMessage(message string, parameters ...interface{}) {
 // parameters in the string using formatting identifiers.
 func (player *Player) Tell(message string, parameters ...interface{}) {
 	message = fmt.Sprintf(message, parameters)
-	player.Exec(command.TellRequest(mctype.Target(player.name), message), func(ret map[string]interface{}) {
-		fmt.Println(ret)
-	})
+	player.Exec(command.TellRequest(mctype.Target(player.name), message), nil)
 }
 
 // Say broadcasts a message as the player to all players in the world of the player.

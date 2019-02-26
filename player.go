@@ -78,6 +78,16 @@ func (player *Player) Say(message string, parameters ...interface{}) {
 	player.ExecAs(command.SayRequest(message), nil)
 }
 
+// Position requests the position of a player and calls the function passed when a response is received,
+// containing the position of the player.
+func (player *Player) Position(f func(position mctype.Position)) {
+	player.Exec(command.QueryTargetRequest(mctype.Target(player.name)), func(response *command.QueryTarget) {
+		if len(*response.Details) == 1 {
+			f((*response.Details)[0].Position)
+		}
+	})
+}
+
 // Connected checks if a player is currently connected. If not, the reference to this player should be
 // released as soon as possible.
 func (player *Player) Connected() bool {

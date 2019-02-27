@@ -134,6 +134,14 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 	})
 }
 
+// OnAwardAchievement listens to achievements awarded to the player. Note that achievements are not awarded in
+// worlds that have cheats enabled.
+func (player *Player) OnAwardAchievement(handler func(event *event.AwardAchievement)) {
+	player.on(event.NameAwardAchievement, func(e interface{}) {
+		handler(e.(*event.AwardAchievement))
+	})
+}
+
 // OnSlashCommandExecuted listens for commands executed by a player that actually existed. Unknown commands do
 // not result in this event being called.
 func (player *Player) OnSlashCommandExecuted(handler func(event *event.SlashCommandExecuted)) {

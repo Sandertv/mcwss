@@ -4,6 +4,7 @@ package event
 type Name string
 
 const (
+	NameAwardAchievement     Name = "AwardAchievement"
 	NameBlockPlaced          Name = "BlockPlaced"
 	NameBlockBroken          Name = "BlockBroken"
 	NameEndOfDay             Name = "EndOfDay"
@@ -32,6 +33,7 @@ const (
 
 // Events is a map used to find the corresponding event for an event name.
 var Events = map[Name]interface{}{
+	NameAwardAchievement:     &AwardAchievement{},
 	NameBlockPlaced:          &BlockPlaced{},
 	NameBlockBroken:          &BlockBroken{},
 	NameEndOfDay:             &EndOfDay{},

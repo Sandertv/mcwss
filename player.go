@@ -288,6 +288,21 @@ func (player *Player) OnTravelled(handler func(event *event.PlayerTravelled)) {
 	})
 }
 
+// OnItemAcquired listens to items acquired by the player, for example by picking items up or by getting items
+// from a chest.
+func (player *Player) OnItemAcquired(handler func(event *event.ItemAcquired)) {
+	player.on(event.NameItemAcquired, func(e interface{}) {
+		handler(e.(*event.ItemAcquired))
+	})
+}
+
+// OnItemDropped listens for items dropped on the ground by the player.
+func (player *Player) OnItemDropped(handler func(event *event.ItemDropped)) {
+	player.on(event.NameItemDropped, func(e interface{}) {
+		handler(e.(*event.ItemDropped))
+	})
+}
+
 // OnItemUsed subscribes to items used by the player.
 func (player *Player) OnItemUsed(handler func(event *event.ItemUsed)) {
 	player.on(event.NameItemUsed, func(e interface{}) {

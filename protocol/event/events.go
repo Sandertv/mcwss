@@ -11,7 +11,9 @@ const (
 	NamePlayerMessage        Name = "PlayerMessage"
 	NamePlayerTravelled      Name = "PlayerTravelled"
 	NamePlayerTransform      Name = "PlayerTransform"
+	NameItemAcquired         Name = "ItemAcquired"
 	NameItemCrafted          Name = "ItemCrafted"
+	NameItemDropped          Name = "ItemDropped"
 	NameItemEquipped         Name = "ItemEquipped"
 	NameItemInteracted       Name = "ItemInteracted"
 	NameItemUsed             Name = "ItemUsed"
@@ -42,7 +44,9 @@ var Events = map[Name]interface{}{
 	NamePlayerMessage:        &PlayerMessage{},
 	NamePlayerTravelled:      &PlayerTravelled{},
 	NamePlayerTransform:      &PlayerTransform{},
+	NameItemAcquired:         &ItemAcquired{},
 	NameItemCrafted:          &ItemCrafted{},
+	NameItemDropped:          &ItemDropped{},
 	NameItemEquipped:         &ItemEquipped{},
 	NameItemInteracted:       &ItemInteracted{},
 	NameItemUsed:             &ItemUsed{},

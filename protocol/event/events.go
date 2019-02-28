@@ -17,6 +17,7 @@ const (
 	NameBookEdited           Name = "BookEdited"
 	NameSignedBookOpened     Name = "SignedBookOpened"
 	NameMobInteracted        Name = "MobInteracted"
+	NameMobKilled            Name = "MobKilled"
 	NameStartWorld           Name = "StartWorld"
 	NameWorldLoaded          Name = "WorldLoaded"
 	NameWorldGenerated       Name = "WorldGenerated"
@@ -46,6 +47,7 @@ var Events = map[Name]interface{}{
 	NameBookEdited:           &BookEdited{},
 	NameSignedBookOpened:     &SignedBookOpened{},
 	NameMobInteracted:        &MobInteracted{},
+	NameMobKilled:            &MobKilled{},
 	NameStartWorld:           &StartWorld{},
 	NameWorldLoaded:          &WorldLoaded{},
 	NameWorldGenerated:       &WorldGenerated{},

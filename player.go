@@ -134,6 +134,14 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 	})
 }
 
+// OnMobKilled listens for entities that were killed by the entity. Note that indirect killing methods such as
+// drowning an entity, hitting off an edge, suffocating it etc. does not trigger the event.
+func (player *Player) OnMobKilled(handler func(event *event.MobKilled)) {
+	player.on(event.NameMobKilled, func(e interface{}) {
+		handler(e.(*event.MobKilled))
+	})
+}
+
 // OnAwardAchievement listens to achievements awarded to the player. Note that achievements are not awarded in
 // worlds that have cheats enabled.
 func (player *Player) OnAwardAchievement(handler func(event *event.AwardAchievement)) {

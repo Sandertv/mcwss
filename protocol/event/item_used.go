@@ -1,7 +1,7 @@
 package event
 
 const (
-	ItemEquipped = iota
+	ItemWorn = iota
 	ItemEaten
 	_
 	ItemDrunk

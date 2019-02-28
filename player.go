@@ -302,6 +302,14 @@ func (player *Player) OnItemInteracted(handler func(event *event.ItemInteracted)
 	})
 }
 
+// OnItemEquipped listens for items equipped by the player. This includes armour, pumpkins, elytras and other
+// items that may be worn.
+func (player *Player) OnItemEquipped(handler func(event *event.ItemEquipped)) {
+	player.on(event.NameItemEquipped, func(e interface{}) {
+		handler(e.(*event.ItemEquipped))
+	})
+}
+
 // OnItemCrafted subscribes to items crafted by the player.
 func (player *Player) OnItemCrafted(handler func(event *event.ItemCrafted)) {
 	player.on(event.NameItemCrafted, func(e interface{}) {

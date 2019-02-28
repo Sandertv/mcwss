@@ -7,9 +7,8 @@ const (
 	ItemDrunk
 	ItemThrown
 	ItemReleased
-	ItemBlockEntityCreated // This is sent when a music disk is put in a music box, when an item frame is
-	// placed, when a brewing stand is placed, but also when a cake is placed...
-	_
+	ItemBlockEntityCreated // This is sent when a music disk is put in a music box, when an item frame is placed, when a brewing stand is placed, but also when a cake is placed...
+	ItemBottleFilled
 	ItemBucketFilled
 	ItemBucketEmptied
 	ItemUsedOnBlock

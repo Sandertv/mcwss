@@ -40,6 +40,13 @@ func (world *World) DestroyBlock(position mctype.BlockPosition) {
 	world.player.Exec(command.SetBlockRequest(position, "air", 0, "destroy"), nil)
 }
 
+// SpawnParticle spawns a particle with a given name into the world at the position passed.
+func (world *World) SpawnParticle(particle string, position mctype.Position) {
+	world.player.Exec(command.ParticleRequest(particle, position), func(data map[string]interface{}) {
+		fmt.Println(data)
+	})
+}
+
 // escapeMessage escapes characters in a string so that it can safely be sent in a command to the player.
 func escapeMessage(message string) string {
 	message = strings.Replace(message, `\`, `\\`, -1)

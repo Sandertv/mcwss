@@ -20,5 +20,5 @@ type TopSolidBlock struct {
 	// indicates the height of the top solid block.
 	Position mctype.BlockPosition `json:"position"`
 	// StatusCode is the status code of the command. This is 0 on success.
-	StatusCode int
+	StatusCode int `json:"statusCode"`
 }

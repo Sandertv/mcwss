@@ -81,6 +81,7 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 		if err := ws.Close(); err != nil {
 			log.Panicf("error closing websocket connection: %v", err)
 		}
+		player.close <- true
 	}()
 
 	for {

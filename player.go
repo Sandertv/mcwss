@@ -10,6 +10,7 @@ import (
 	"github.com/sandertv/mcwss/protocol/event"
 	"log"
 	"reflect"
+	"sync"
 )
 
 // Player is a player connected to the websocket server.
@@ -23,8 +24,12 @@ type Player struct {
 	agent *Agent
 	world *World
 
+	sync.Mutex
 	handlers         map[event.Name]func(event interface{})
 	commandCallbacks map[string]reflect.Value
+
+	close       chan bool
+	packetStack chan interface{}
 }
 
 // NewPlayer returns an initialised player for a websocket connection.
@@ -34,12 +39,15 @@ func NewPlayer(conn *websocket.Conn) *Player {
 		connected:        true,
 		handlers:         make(map[event.Name]func(event interface{})),
 		commandCallbacks: make(map[string]reflect.Value),
+		packetStack:      make(chan interface{}, 64),
+		close:            make(chan bool, 1),
 	}
 	player.Exec(command.LocalPlayerNameRequest(), func(response *command.LocalPlayerName) {
 		player.name = response.LocalPlayerName
 	})
 	player.agent = NewAgent(player)
 	player.world = NewWorld(player)
+	go player.sendPackets()
 	return player
 }
 
@@ -112,7 +120,9 @@ func (player *Player) Exec(commandLine string, callback interface{}) {
 		}
 	}
 	packet := protocol.NewCommandRequest(commandLine)
+	player.Lock()
 	player.commandCallbacks[packet.Header.RequestID] = val
+	player.Unlock()
 	_ = player.WriteJSON(packet)
 }
 
@@ -363,14 +373,23 @@ func (player *Player) CloseConnection() {
 
 // UnsubscribeFromAll unsubscribes from all events previously listened on. No more events will be received.
 func (player *Player) UnsubscribeFromAll() {
+	player.Lock()
 	for eventName := range player.handlers {
-		player.UnsubscribeFrom(eventName)
+		player.unsubscribeFrom(eventName)
 	}
+	player.Unlock()
 }
 
 // UnsubscribeFrom unsubscribes from events with the event name passed. The handler used to handle the event
 // will no longer be called.
 func (player *Player) UnsubscribeFrom(eventName event.Name) {
+	player.Lock()
+	player.unsubscribeFrom(eventName)
+	player.Unlock()
+}
+
+// unsubscribeFrom unsubscribes from an event without locking.
+func (player *Player) unsubscribeFrom(eventName event.Name) {
 	_ = player.WriteJSON(protocol.NewEventRequest(eventName, protocol.Unsubscribe))
 	delete(player.handlers, eventName)
 }
@@ -378,8 +397,29 @@ func (player *Player) UnsubscribeFrom(eventName event.Name) {
 // on subscribes to an arbitrary event. It is recommended to use the methods to listen specifically to events
 // above.
 func (player *Player) on(eventName event.Name, handler func(event interface{})) {
+	player.Lock()
 	player.handlers[eventName] = handler
+	player.Unlock()
 	_ = player.WriteJSON(protocol.NewEventRequest(eventName, protocol.Subscribe))
+}
+
+// WriteJSON adds a packet to the packet stack, after which will be written as JSON to the websocket
+// connection.
+func (player *Player) WriteJSON(v interface{}) error {
+	player.packetStack <- v
+	return nil
+}
+
+// sendPackets continuously sends packets to the websocket connection until the player is disconnected.
+func (player *Player) sendPackets() {
+	for {
+		select {
+		case packet := <-player.packetStack:
+			_ = player.Conn.WriteJSON(packet)
+		case <-player.close:
+			return
+		}
+	}
 }
 
 // handleIncomingPacket handles an incoming packet, processing in particular the body of the packet.
@@ -391,12 +431,14 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 	case *protocol.ErrorResponse:
 		return fmt.Errorf("a client side error occurred (code = %v): %v", body.StatusCode, body.StatusMessage)
 	case *protocol.CommandResponse:
+		player.Lock()
 		callback, ok := player.commandCallbacks[packet.Header.RequestID]
+		// Remove the command callback from the map.
+		delete(player.commandCallbacks, packet.Header.RequestID)
+		player.Unlock()
 		if !ok {
 			return fmt.Errorf("command response: got command response with unknown requestID %v", packet.Header.RequestID)
 		}
-		// Remove the command callback from the map.
-		delete(player.commandCallbacks, packet.Header.RequestID)
 
 		if callback.IsValid() {
 			commandResponseValue := reflect.New(callback.Type().In(0)).Interface()
@@ -425,7 +467,9 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 		}
 
 		// Find the handler by the event name.
+		player.Lock()
 		handler, ok := player.handlers[body.EventName]
+		player.Unlock()
 		if !ok {
 			return fmt.Errorf("event response: unhandled event response for event %v", body.EventName)
 		}

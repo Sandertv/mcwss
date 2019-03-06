@@ -18,7 +18,7 @@ type SetBlock struct {
 	Position mctype.Position `json:"position"`
 	// StatusMessage is the status message of the command. This is 'Block placed' if the command was
 	// successful.
-	StatusMessage string
+	StatusMessage string `json:"statusMessage"`
 	// StatusCode is the status code of the command. If successful, this is 0.
-	StatusCode int
+	StatusCode int `json:"statusCode"`
 }

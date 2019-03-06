@@ -1,6 +1,9 @@
 package mcwss
 
 import (
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
 	"encoding/json"
 	"github.com/gorilla/websocket"
 	"github.com/sandertv/mcwss/protocol"
@@ -17,16 +20,35 @@ type Server struct {
 	players           map[*Player]bool
 	connectionFunc    func(conn *Player)
 	disconnectionFunc func(conn *Player)
+
+	salt       []byte
+	privateKey *ecdsa.PrivateKey
 }
 
 // NewServer initialises and returns a new server. If the configuration passed in was non-nil, that
 // configuration is used. If nil is passed, the default configuration is used. (see config.go/defaultConfig())
 func NewServer(config *Config) *Server {
+	privateKey, err := ecdsa.GenerateKey(elliptic.P384(), rand.Reader)
+	if err != nil {
+		// Should never happen.
+		panic(err)
+	}
+	salt := make([]byte, 16)
+	if _, err := rand.Read(salt); err != nil {
+		// Should never happen.
+		panic(err)
+	}
 	server := &Server{
 		players:           make(map[*Player]bool),
 		config:            defaultConfig(),
 		connectionFunc:    func(conn *Player) {},
 		disconnectionFunc: func(conn *Player) {},
+		upgrader: websocket.Upgrader{
+			EnableCompression: true,
+			Subprotocols:      []string{MinecraftWSEncryptSubprotocol},
+		},
+		privateKey: privateKey,
+		salt:       salt,
 	}
 	if config != nil {
 		server.config = *config
@@ -92,10 +114,15 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 			log.Printf("error reading message from connection: %v", err)
 			break
 		}
-		if msgType != 1 {
+		if msgType != websocket.TextMessage && msgType != websocket.BinaryMessage {
 			log.Printf("unexpected message type %v", msgType)
 			break
 		}
+		if player.encryptionSession != nil {
+			// Decrypt if the player's encryption session is established.
+			player.encryptionSession.decrypt(payload)
+		}
+
 		packet := &protocol.Packet{}
 		if err := json.Unmarshal(payload, packet); err != nil {
 			log.Printf("malformed packet JSON: %v", err)
@@ -128,8 +155,10 @@ func (server *Server) handleResponse(writer http.ResponseWriter, request *http.R
 			break
 		}
 		if nameBefore == "" {
-			// Allow the creator of the server to interact with the new player.
-			server.connectionFunc(player)
+			player.enableEncryption(server.privateKey, server.salt, func() {
+				// Allow the creator of the server to interact with the new player.
+				server.connectionFunc(player)
+			})
 		}
 	}
 }

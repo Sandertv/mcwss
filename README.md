@@ -12,6 +12,9 @@ In order to be able to execute the `/connect` and `/wsserver` commands, cheats m
 servers is not possible, and only on the dedicated server when cheats are enabled. It is possible to connect on a singleplayer world and
 join a server after that, but commands executed by the websocket server will not work. Events will still be sent by the client however.
 
+In the settings tab, there is also a setting that enables/disables encrypted websockets. mcwss implements encryption between websockets, 
+so changing this setting will not have an effect on the behaviour of mcwss.
+
 ## Getting Started
 
 ### Prerequisites

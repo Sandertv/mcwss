@@ -1,6 +1,9 @@
 package mcwss
 
 import (
+	"crypto/ecdsa"
+	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
@@ -16,6 +19,7 @@ import (
 // Player is a player connected to the websocket server.
 type Player struct {
 	*websocket.Conn
+	encryptionSession *encryptionSession
 
 	name      string
 	connected bool
@@ -423,7 +427,11 @@ func (player *Player) sendPackets() {
 	for {
 		select {
 		case packet := <-player.packetStack:
-			_ = player.Conn.WriteJSON(packet)
+			data, _ := json.Marshal(packet)
+			if player.encryptionSession != nil {
+				player.encryptionSession.encrypt(data)
+			}
+			_ = player.Conn.WriteMessage(websocket.TextMessage, data)
 		case <-player.close:
 			return
 		}
@@ -485,4 +493,38 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 		handler(eventData)
 	}
 	return nil
+}
+
+// enableEncryption enables encryption for a player using the server's private key passed and the server's
+// salt passed. The 'after' function passed is called after encryption was enabled.
+func (player *Player) enableEncryption(privateKey *ecdsa.PrivateKey, salt []byte, after func()) {
+	encodedKey, err := x509.MarshalPKIXPublicKey(&privateKey.PublicKey)
+	if err != nil {
+		// This should never happen.
+		panic(err)
+	}
+
+	player.Exec(command.EnableEncryptionRequest(encodedKey, salt), func(data *command.EnableEncryption) {
+		pubKeyData, err := base64.StdEncoding.DecodeString(data.PublicKey)
+		if err != nil {
+			log.Printf("error base64 decoding client public key %v: %v", data.PublicKey, err)
+			return
+		}
+		pubKey, err := x509.ParsePKIXPublicKey(pubKeyData)
+		if err != nil {
+			log.Printf("error parsing ecdsa public key %v: %v", data.PublicKey, err)
+			return
+		}
+
+		player.encryptionSession = &encryptionSession{
+			salt:             salt,
+			serverPrivateKey: privateKey,
+			clientPublicKey:  pubKey.(*ecdsa.PublicKey),
+		}
+		if err := player.encryptionSession.init(); err != nil {
+			log.Printf("error initialising encryption session: %v", err)
+			return
+		}
+		after()
+	})
 }

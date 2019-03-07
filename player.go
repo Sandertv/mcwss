@@ -506,7 +506,6 @@ func (player *Player) enableEncryption(privateKey *ecdsa.PrivateKey, salt []byte
 	}
 
 	player.Exec(command.EnableEncryptionRequest(encodedKey, salt), func(data *command.EnableEncryption) {
-		fmt.Println(data.PublicKey)
 		pubKeyData, err := base64.StdEncoding.DecodeString(data.PublicKey)
 		if err != nil {
 			log.Printf("error base64 decoding client public key %v: %v", data.PublicKey, err)

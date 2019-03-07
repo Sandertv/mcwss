@@ -108,6 +108,12 @@ func (player *Player) EduInformation(f func(info *command.EduClientInfo)) {
 	player.Exec(command.EduClientInfoRequest(), f)
 }
 
+// CloseChat closes the chat window of a player if the player has it open. This command is available also on
+// third party servers.
+func (player *Player) CloseChat() {
+	player.Exec(command.CloseChatRequest(), nil)
+}
+
 // Connected checks if a player is currently connected. If not, the reference to this player should be
 // released as soon as possible.
 func (player *Player) Connected() bool {

@@ -8,6 +8,8 @@ func EduClientInfoRequest() string {
 
 // EduClientInfo is sent by the server to receive education information about the player connected to the
 // websocket server. This command is available even if the player is not using education edition.
+//
+// This is a client-side command which can be called even on third-party servers that do not implement it.
 type EduClientInfo struct {
 	// IsEdu indicates if the player's game was of education edition.
 	IsEdu bool `json:"isEdu"`

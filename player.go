@@ -102,6 +102,12 @@ func (player *Player) Position(f func(position mctype.Position)) {
 	})
 }
 
+// EduInformation requests information about the player (specifically education edition related, but
+// education edition needs not to be enabled) and calls the function passed when a response is received.
+func (player *Player) EduInformation(f func(info *command.EduClientInfo)) {
+	player.Exec(command.EduClientInfoRequest(), f)
+}
+
 // Connected checks if a player is currently connected. If not, the reference to this player should be
 // released as soon as possible.
 func (player *Player) Connected() bool {

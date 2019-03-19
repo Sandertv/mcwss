@@ -24,11 +24,6 @@ const (
 	NameStartWorld           Name = "StartWorld"
 	NameWorldLoaded          Name = "WorldLoaded"
 	NameWorldGenerated       Name = "WorldGenerated"
-	NameScriptBroadcastEvent Name = "ScriptBroadcastEvent"
-	NameScriptError          Name = "ScriptError"
-	NameScriptGetComponent   Name = "ScriptGetComponent"
-	NameScriptInternalError  Name = "ScriptInternalError"
-	NameScriptListenToEvent  Name = "ScriptListenToEvent"
 	NameScriptLoaded         Name = "ScriptLoaded"
 	NameScriptRan            Name = "ScriptRan"
 	NameScreenChanged        Name = "ScreenChanged"
@@ -57,11 +52,6 @@ var Events = map[Name]interface{}{
 	NameStartWorld:           &StartWorld{},
 	NameWorldLoaded:          &WorldLoaded{},
 	NameWorldGenerated:       &WorldGenerated{},
-	NameScriptBroadcastEvent: &ScriptBroadcastEvent{},
-	NameScriptError:          &ScriptError{},
-	NameScriptGetComponent:   &ScriptGetComponent{},
-	NameScriptInternalError:  &ScriptInternalError{},
-	NameScriptListenToEvent:  &ScriptListenToEvent{},
 	NameScriptLoaded:         &ScriptLoaded{},
 	NameScriptRan:            &ScriptRan{},
 	NameScreenChanged:        &ScreenChanged{},

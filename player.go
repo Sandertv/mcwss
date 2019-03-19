@@ -195,46 +195,6 @@ func (player *Player) OnScreenChanged(handler func(event *event.ScreenChanged)) 
 	})
 }
 
-// OnScriptBroadcastEvent listens for scripts ran by the player that broadcast events. Due to the nature of
-// this event, scripts could send JSON objects as event to listen on to communicate with the websocket server
-// for interaction between the two.
-func (player *Player) OnScriptBroadcastEvent(handler func(event *event.ScriptBroadcastEvent)) {
-	player.on(event.NameScriptBroadcastEvent, func(e interface{}) {
-		handler(e.(*event.ScriptBroadcastEvent))
-	})
-}
-
-// OnScriptError listens for 'non-critical' errors encountered in scripts ran by the player. These errors
-// generally have a very detailed error message.
-func (player *Player) OnScriptError(handler func(event *event.ScriptError)) {
-	player.on(event.NameScriptError, func(e interface{}) {
-		handler(e.(*event.ScriptError))
-	})
-}
-
-// OnScriptGetComponent listens for scripts calling the getComponent method.
-func (player *Player) OnScriptGetComponent(handler func(event *event.ScriptGetComponent)) {
-	player.on(event.NameScriptGetComponent, func(e interface{}) {
-		handler(e.(*event.ScriptGetComponent))
-	})
-}
-
-// OnScriptInternalError listens for 'critical' errors encountered during the initial loading of a script.
-// These errors often have a very vague error message, often pointing back to a syntax error or other critical
-// error found in the script.
-func (player *Player) OnScriptInternalError(handler func(event *event.ScriptInternalError)) {
-	player.on(event.NameScriptInternalError, func(e interface{}) {
-		handler(e.(*event.ScriptInternalError))
-	})
-}
-
-// OnScriptListenToEvent listens for scripts ran by the client that start listening for events.
-func (player *Player) OnScriptListenToEvent(handler func(event *event.ScriptListenToEvent)) {
-	player.on(event.NameScriptListenToEvent, func(e interface{}) {
-		handler(e.(*event.ScriptListenToEvent))
-	})
-}
-
 // OnScriptLoaded listens for scripts that are loaded by the player.
 func (player *Player) OnScriptLoaded(handler func(event *event.ScriptLoaded)) {
 	player.on(event.NameScriptLoaded, func(e interface{}) {

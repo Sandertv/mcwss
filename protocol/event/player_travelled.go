@@ -15,17 +15,7 @@ const (
 
 // PlayerTravelled is sent by the client when it travels to a new destination.
 type PlayerTravelled struct {
-	// MetresTravelled is the distance a player has travelled since the last player travelled event.
-	MetresTravelled float64
-	// AverageX is the average X position during the travel.
-	AverageX float64
-	// AverageY is the average Y position during the travel.
-	AverageY float64
-	// AverageZ is the average Z position during the travel.
-	AverageZ float64
-	// NewBiome is the new biome of the player. This is often the same as the current biome.
-	NewBiome int
-
+	measurements Measurements
 	// TravelMethodType is the method type indicating the way the player travelled.
 	TravelMethodType int
 	// HasRelevantBuff specifies if a player has an effect that affects its movement, such as slowness, jump
@@ -35,11 +25,12 @@ type PlayerTravelled struct {
 	MobType int
 }
 
+// Measurements returns all measurements associated with the player travelled event.
+func (event *PlayerTravelled) Measurements() Measurements {
+	return event.measurements
+}
+
 // ConsumeMeasurements takes the movement measurements from the Measurements struct.
 func (event *PlayerTravelled) ConsumeMeasurements(measurements Measurements) {
-	event.MetresTravelled = measurements.MetresTravelled
-	event.AverageX = measurements.PositionAverageX
-	event.AverageY = measurements.PositionAverageY
-	event.AverageZ = measurements.PositionAverageZ
-	event.NewBiome = measurements.NewBiome
+	event.measurements = measurements
 }

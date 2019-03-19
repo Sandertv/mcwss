@@ -16,15 +16,15 @@ type MobKilled struct {
 	// ArmourHeadAuxType is the aux value/metadata of the helmet item worn.
 	ArmourHeadAuxType int `json:"ArmorHeadAuxType"`
 	// ArmourHeadID is the numerical ID of the helmet item worn.
-	ArmourHeadID int `json:"ArmorHeadAuxId"`
+	ArmourHeadID int `json:"ArmorHeadId"`
 	// ArmourLegsAuxType is the aux value/metadata of the leggings item worn.
 	AmourLegsAuxType int `json:"ArmorLegsAuxType"`
 	// ArmourLegsID is the numerical ID of the leggings item worn.
-	ArmourLegsID int `json:"ArmorLegsAuxId"`
+	ArmourLegsID int `json:"ArmorLegsId"`
 	// ArmourTorsoAuxType is the aux value/metadata of the torso item worn.
 	ArmourTorsoAuxType int `json:"ArmorTorsoAuxType"`
 	// ArmourTorsoID is the numerical ID of the torso item worn.
-	ArmourTorsoID int `json:"ArmorTorsoAuxId"`
+	ArmourTorsoID int `json:"ArmorTorsoId"`
 	// IsMonster indicates if the living entity killed was a monster. Note that this is not true for neutral
 	// entities such as wolves that turn angry.
 	IsMonster bool

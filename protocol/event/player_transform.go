@@ -5,7 +5,11 @@ package event
 // player is, for example, teleported.
 type PlayerTransform struct {
 	// PlayerYRot is the Y rotation of the player after the transformation.
-	PlayerYRotation float64 `json:"PlayerYRotation"`
+	PlayerYRotation float64 `json:"PlayerYRot"`
+	// PlayerID is the UUID of the player.
+	PlayerID string `json:"PlayerId"`
+	// Dimension is the dimension of the player.
+	Dimension int `json:"Dimension"`
 	// PositionX is the position on the X axis of the player after the transformation.
 	PositionX float64 `json:"PosX"`
 	// PositionY is the position on the Y axis of the player after the transformation.

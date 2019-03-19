@@ -11,6 +11,7 @@ import (
 	"github.com/sandertv/mcwss/protocol"
 	"github.com/sandertv/mcwss/protocol/command"
 	"github.com/sandertv/mcwss/protocol/event"
+	"github.com/yudai/gojsondiff"
 	"log"
 	"reflect"
 	"sync"
@@ -20,6 +21,7 @@ import (
 type Player struct {
 	*websocket.Conn
 	encryptionSession *encryptionSession
+	debug             bool
 
 	name      string
 	connected bool
@@ -161,6 +163,12 @@ func (player *Player) ExecAs(commandLine string, callback func(statusCode int)) 
 			callback(code)
 		}
 	})
+}
+
+// EnableDebug enables debug messages for a player. It will output messages about missing fields in events
+// and related.
+func (player *Player) EnableDebug() {
+	player.debug = true
 }
 
 // OnMobKilled listens for entities that were killed by the entity. Note that indirect killing methods such as
@@ -453,6 +461,38 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 		if measurable, ok := eventData.(event.Measurable); ok {
 			// Parse measurements if the event requires them.
 			measurable.ConsumeMeasurements(body.Measurements)
+		}
+
+		if player.debug {
+			foundData := map[string]interface{}{}
+			b, _ := json.Marshal(eventData)
+			_ = json.Unmarshal(b, &foundData)
+			b, _ = json.Marshal(properties)
+			_ = json.Unmarshal(b, &foundData)
+			b, _ = json.Marshal(foundData)
+			actualData := map[string]interface{}{}
+			_ = json.Unmarshal(body.Properties, &actualData)
+
+			d := gojsondiff.New()
+			deltaDiff, err := d.Compare(b, body.Properties)
+			if err != nil {
+				log.Printf("error computing diff: %v", err)
+			}
+			for _, change := range deltaDiff.Deltas() {
+				changeKey := fmt.Sprint(change)
+				var actualVal interface{}
+				if v, ok := actualData[changeKey]; ok {
+					actualVal = v
+				}
+				if actualVal == nil {
+					log.Printf("diff in %T.%v: should not exist", eventData, changeKey)
+				} else if decVal, ok := foundData[changeKey]; ok {
+					log.Printf("diff in %T.%v: %v should be %v", eventData, changeKey, decVal, actualVal)
+				} else {
+					log.Printf("diff in %T.%v: should be %v", eventData, changeKey, actualVal)
+				}
+
+			}
 		}
 
 		// Find the handler by the event name.

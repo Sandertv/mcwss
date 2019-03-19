@@ -9,9 +9,6 @@ type SlashCommandExecuted struct {
 	// either 0 or 1. For the so called 'functions', the possible amount of errors encountered depends on the
 	// amount of commands executed in the function.
 	ErrorCount int
-	// ErrorList is a list of the command error codes encountered, joined by '\n'. For example
-	// 'commands.generic.num.tooBig'
-	ErrorList string
 	// SuccessCount is the amount of success returns the command encountered. For normal commands, this will
 	// always be either 0 or 1. For the so called 'functions', the possible amount of success returns depends
 	// on the amount of commands executed in the function.

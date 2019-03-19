@@ -71,5 +71,5 @@ type ScreenChanged struct {
 	Seconds float64
 	// Timestamp is a timestamp indicating the time the screen was changed relative to the time the player
 	// opened the game.
-	Timestamp float64
+	Timestamp float64 `json:"TimeStamp"`
 }

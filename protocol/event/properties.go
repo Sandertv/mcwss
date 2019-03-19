@@ -23,7 +23,6 @@ type Properties struct {
 	SchemaCommitHash               string
 	Sequence                       int    `json:"Seq"`
 	ServerID                       string `json:"ServerId"`
-	ToolItemType                   int
 	Treatments                     string
 	UserID                         string `json:"UserId"`
 	WorldFeature                   int

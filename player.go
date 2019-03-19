@@ -480,6 +480,11 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 			}
 			for _, change := range deltaDiff.Deltas() {
 				changeKey := fmt.Sprint(change)
+				if changeKey == "Seq" {
+					// Some events have this fields, others don't. We don't really have a use for this, so we
+					// just completely ignore it.
+					continue
+				}
 				var actualVal interface{}
 				if v, ok := actualData[changeKey]; ok {
 					actualVal = v

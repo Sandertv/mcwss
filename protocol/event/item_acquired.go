@@ -24,5 +24,5 @@ type ItemAcquired struct {
 	AuxType int
 	// AcquisitionMethod was the method used to acquire the item. This is one of the methods in the constants
 	// above.
-	AcquisitionMethod int
+	AcquisitionMethodID int
 }

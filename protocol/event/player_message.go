@@ -12,6 +12,4 @@ type PlayerMessage struct {
 	Sender string
 	// Receiver is the receiver of the text message.
 	Receiver string
-	// IsTrial ???
-	IsTrial bool
 }

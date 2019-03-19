@@ -27,6 +27,7 @@ type Properties struct {
 	UserID                         string `json:"UserId"`
 	WorldFeature                   int
 	WorldSessionID                 string `json:"WorldSessionId"`
+	IsTrial                        int    `json:"isTrial"`
 	EditionType                    string `json:"editionType"`
 	Locale                         string `json:"locale"`
 	VRMode                         bool   `json:"vrMode"`

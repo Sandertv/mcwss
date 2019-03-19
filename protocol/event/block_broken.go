@@ -10,6 +10,8 @@ type BlockBroken struct {
 	AuxType int
 	// Block is the block that was broken. This is a string like 'stone'.
 	Block string
+	// Variant is the variant of the block broken. This is the same as AuxType.
+	Variant int
 	// Namespace is the namespace to which the block belongs. Usually, this is 'minecraft'.
 	Namespace string
 	// Type is the numerical ID of the block broken. For stone, this is 1.

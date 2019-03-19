@@ -10,4 +10,8 @@ type PlayerMessage struct {
 	// Sender is the name of the sender of the message. This may be the name of the receiver if the receiver
 	// sent a message.
 	Sender string
+	// Receiver is the receiver of the text message.
+	Receiver string
+	// IsTrial ???
+	IsTrial bool
 }

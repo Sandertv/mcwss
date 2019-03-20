@@ -452,10 +452,11 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 		// Update the player's properties to the latest.
 		player.Properties = properties
 
-		eventData, ok := event.Events[body.EventName]
+		eventFunc, ok := event.Events[body.EventName]
 		if !ok {
 			return fmt.Errorf("event response: unknown event with name %v", body.EventName)
 		}
+		eventData := eventFunc()
 		_ = json.Unmarshal(body.Properties, &eventData)
 
 		if measurable, ok := eventData.(event.Measurable); ok {
@@ -470,33 +471,30 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 			b, _ = json.Marshal(properties)
 			_ = json.Unmarshal(b, &foundData)
 			b, _ = json.Marshal(foundData)
-			actualData := map[string]interface{}{}
-			_ = json.Unmarshal(body.Properties, &actualData)
 
 			d := gojsondiff.New()
 			deltaDiff, err := d.Compare(b, body.Properties)
 			if err != nil {
 				log.Printf("error computing diff: %v", err)
 			}
+
+			actualData := map[string]interface{}{}
+			_ = json.Unmarshal(body.Properties, &actualData)
+
 			for _, change := range deltaDiff.Deltas() {
 				changeKey := fmt.Sprint(change)
-				if changeKey == "Seq" {
-					// Some events have this fields, others don't. We don't really have a use for this, so we
-					// just completely ignore it.
-					continue
-				}
 				var actualVal interface{}
 				if v, ok := actualData[changeKey]; ok {
 					actualVal = v
 				}
-				if actualVal == nil {
+				decVal, ok := foundData[changeKey]
+				if actualVal == nil && decVal != nil {
 					log.Printf("diff in %T.%v: should not exist", eventData, changeKey)
-				} else if decVal, ok := foundData[changeKey]; ok {
+				} else if ok {
 					log.Printf("diff in %T.%v: %v should be %v", eventData, changeKey, decVal, actualVal)
 				} else {
 					log.Printf("diff in %T.%v: should be %v", eventData, changeKey, actualVal)
 				}
-
 			}
 		}
 

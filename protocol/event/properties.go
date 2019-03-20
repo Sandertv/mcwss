@@ -11,22 +11,22 @@ type Properties struct {
 	Achievements                   bool   `json:"Cheevos"`
 	ClientID                       string `json:"ClientId"`
 	CurrentInput                   int
-	CurrentNumPlayers              int
+	CurrentNumPlayers              int    `json:",omitempty"`
 	DeviceSessionID                string `json:"DeviceSessionId"`
 	Dimension                      int    `json:"Dim"`
-	GlobalMultiplayerCorrelationID string `json:"GlobalMultiplayerCorrelationId"`
+	GlobalMultiplayerCorrelationID string `json:"GlobalMultiplayerCorrelationId,omitempty"`
 	Mode                           int
 	MultiplayerCorrelationID       string `json:"MultiplayerCorrelationId"`
 	NetworkType                    int
 	Platform                       string `json:"Plat"`
 	PlayerGameMode                 int
 	SchemaCommitHash               string
-	Sequence                       int    `json:"Seq"`
+	Sequence                       int    `json:"Seq,omitempty"`
 	ServerID                       string `json:"ServerId"`
 	Treatments                     string
 	UserID                         string `json:"UserId"`
 	WorldFeature                   int
-	WorldSessionID                 string `json:"WorldSessionId"`
+	WorldSessionID                 string `json:"WorldSessionId,omitempty"`
 	IsTrial                        int    `json:"isTrial"`
 	EditionType                    string `json:"editionType"`
 	Locale                         string `json:"locale"`

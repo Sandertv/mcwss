@@ -23,6 +23,8 @@ type PlayerTravelled struct {
 	HasRelevantBuff bool
 	// MobType no longer seems to be used. It appears always to be 0.
 	MobType int
+	// IsUnderwater indicates if the movement was underwater.
+	IsUnderwater bool `json:",omitempty"`
 }
 
 // Measurements returns all measurements associated with the player travelled event.

@@ -11,5 +11,5 @@ type PlayerMessage struct {
 	// sent a message.
 	Sender string
 	// Receiver is the receiver of the text message.
-	Receiver string
+	Receiver string `json:",omitempty"`
 }

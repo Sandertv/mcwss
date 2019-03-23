@@ -491,9 +491,9 @@ func (player *Player) handleIncomingPacket(packet protocol.Packet) error {
 				if actualVal == nil && decVal != nil {
 					log.Printf("diff in %T.%v: should not exist", eventData, changeKey)
 				} else if ok {
-					log.Printf("diff in %T.%v: %v should be %v", eventData, changeKey, decVal, actualVal)
+					log.Printf("diff in %T.%v: '%v' should be '%v'", eventData, changeKey, decVal, actualVal)
 				} else {
-					log.Printf("diff in %T.%v: should be %v", eventData, changeKey, actualVal)
+					log.Printf("diff in %T.%v: should be '%v'", eventData, changeKey, actualVal)
 				}
 			}
 		}

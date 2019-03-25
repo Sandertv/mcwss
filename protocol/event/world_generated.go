@@ -10,4 +10,6 @@ type WorldGenerated struct {
 	// IsFromWorldTemplate indicates if the world was generated from a world template, or in other words, was
 	// bought from the marketplace.
 	IsFromWorldTemplate bool `json:"fromTemplate"`
+	// SaveID is a base64 encoded string that identifies the save folder of the world.
+	SaveID string `json:"SaveId,omitempty"`
 }

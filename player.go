@@ -358,6 +358,20 @@ func (player *Player) OnPlayerMessage(handler func(event *event.PlayerMessage)) 
 	})
 }
 
+// OnSignInToXBOXLive listens for the player signing into XBOX Live.
+func (player *Player) OnSignInToXBOXLive(handler func(event *event.SignInToXBOXLive)) {
+	player.on(event.NameSignInToXBOXLive, func(e interface{}) {
+		handler(e.(*event.SignInToXBOXLive))
+	})
+}
+
+// OnSignOutOfXBOXLive listens for the player signing out of XBOX Live.
+func (player *Player) OnSignOutOfXBOXLive(handler func(event *event.SignOutOfXBOXLive)) {
+	player.on(event.NameSignOutOfXBOXLive, func(e interface{}) {
+		handler(e.(*event.SignOutOfXBOXLive))
+	})
+}
+
 // CloseConnection closes the socket connection with the player. The player will be closed shortly after this
 // method is called.
 func (player *Player) CloseConnection() {

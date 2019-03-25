@@ -28,6 +28,8 @@ const (
 	NameScriptRan            Name = "ScriptRan"
 	NameScreenChanged        Name = "ScreenChanged"
 	NameSlashCommandExecuted Name = "SlashCommandExecuted"
+	NameSignInToXBOXLive     Name = "SignInToXboxLive"
+	NameSignOutOfXBOXLive    Name = "SignOutOfXboxLive"
 )
 
 // Events is a map used to find the corresponding event for an event name.
@@ -56,4 +58,6 @@ var Events = map[Name]func() interface{}{
 	NameScriptRan:            func() interface{} { return &ScriptRan{} },
 	NameScreenChanged:        func() interface{} { return &ScreenChanged{} },
 	NameSlashCommandExecuted: func() interface{} { return &SlashCommandExecuted{} },
+	NameSignInToXBOXLive:     func() interface{} { return &SignInToXBOXLive{} },
+	NameSignOutOfXBOXLive:    func() interface{} { return &SignOutOfXBOXLive{} },
 }

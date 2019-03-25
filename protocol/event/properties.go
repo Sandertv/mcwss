@@ -24,11 +24,12 @@ type Properties struct {
 	Sequence                       int    `json:"Seq,omitempty"`
 	ServerID                       string `json:"ServerId"`
 	Treatments                     string
-	UserID                         string `json:"UserId"`
-	WorldFeature                   int
-	WorldSessionID                 string `json:"WorldSessionId,omitempty"`
-	IsTrial                        int    `json:"isTrial"`
-	EditionType                    string `json:"editionType"`
-	Locale                         string `json:"locale"`
-	VRMode                         bool   `json:"vrMode"`
+	// UserID is a UUID that is only set when a player is logged into XBOX Live.
+	UserID         string `json:"UserId,omitempty"`
+	WorldFeature   int
+	WorldSessionID string `json:"WorldSessionId,omitempty"`
+	IsTrial        int    `json:"isTrial"`
+	EditionType    string `json:"editionType"`
+	Locale         string `json:"locale"`
+	VRMode         bool   `json:"vrMode"`
 }

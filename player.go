@@ -294,6 +294,14 @@ func (player *Player) OnBookEdited(handler func(event *event.BookEdited)) {
 	})
 }
 
+// OnTeleported listens for teleportations done by the player, such as using the /tp command or throwing an
+// ender pearl.
+func (player *Player) OnTeleported(handler func(event *event.PlayerTeleported)) {
+	player.on(event.NamePlayerTeleported, func(e interface{}) {
+		handler(e.(*event.PlayerTeleported))
+	})
+}
+
 // OnTransform subscribes to transformations done to the player, usually sent by means such as teleporting.
 func (player *Player) OnTransform(handler func(event *event.PlayerTransform)) {
 	player.on(event.NamePlayerTransform, func(e interface{}) {

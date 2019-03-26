@@ -11,6 +11,7 @@ const (
 	NameGameRulesLoaded      Name = "GameRulesLoaded"
 	NameGameRulesUpdated     Name = "GameRulesUpdated"
 	NamePlayerMessage        Name = "PlayerMessage"
+	NamePlayerTeleported     Name = "PlayerTeleported"
 	NamePlayerTravelled      Name = "PlayerTravelled"
 	NamePlayerTransform      Name = "PlayerTransform"
 	NameItemAcquired         Name = "ItemAcquired"
@@ -47,6 +48,7 @@ var Events = map[Name]func() interface{}{
 	NameGameRulesLoaded:      func() interface{} { return &GameRulesLoaded{} },
 	NameGameRulesUpdated:     func() interface{} { return &GameRulesUpdated{} },
 	NamePlayerMessage:        func() interface{} { return &PlayerMessage{} },
+	NamePlayerTeleported:     func() interface{} { return &PlayerTeleported{} },
 	NamePlayerTravelled:      func() interface{} { return &PlayerTravelled{} },
 	NamePlayerTransform:      func() interface{} { return &PlayerTransform{} },
 	NameItemAcquired:         func() interface{} { return &ItemAcquired{} },

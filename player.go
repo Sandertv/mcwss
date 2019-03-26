@@ -393,6 +393,13 @@ func (player *Player) OnSignOutOfXBOXLive(handler func(event *event.SignOutOfXBO
 	})
 }
 
+// OnVehicleExited listens for the player exiting a vehicle such as a minecart or a horse.
+func (player *Player) OnVehicleExited(handler func(event *event.VehicleExited)) {
+	player.on(event.NameVehicleExited, func(e interface{}) {
+		handler(e.(*event.VehicleExited))
+	})
+}
+
 // CloseConnection closes the socket connection with the player. The player will be closed shortly after this
 // method is called.
 func (player *Player) CloseConnection() {

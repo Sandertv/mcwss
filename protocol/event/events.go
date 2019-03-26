@@ -33,6 +33,7 @@ const (
 	NameSlashCommandExecuted Name = "SlashCommandExecuted"
 	NameSignInToXBOXLive     Name = "SignInToXboxLive"
 	NameSignOutOfXBOXLive    Name = "SignOutOfXboxLive"
+	NameVehicleExited        Name = "VehicleExited"
 )
 
 // Events is a map used to find the corresponding event for an event name.
@@ -66,4 +67,5 @@ var Events = map[Name]func() interface{}{
 	NameSlashCommandExecuted: func() interface{} { return &SlashCommandExecuted{} },
 	NameSignInToXBOXLive:     func() interface{} { return &SignInToXBOXLive{} },
 	NameSignOutOfXBOXLive:    func() interface{} { return &SignOutOfXBOXLive{} },
+	NameVehicleExited:        func() interface{} { return &VehicleExited{} },
 }

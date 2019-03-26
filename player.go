@@ -300,6 +300,13 @@ func (player *Player) OnItemDropped(handler func(event *event.ItemDropped)) {
 	})
 }
 
+// OnItemSmelted listens for items smelted by the player and taken out of the inventory.
+func (player *Player) OnItemSmelted(handler func(event *event.ItemSmelted)) {
+	player.on(event.NameItemSmelted, func(e interface{}) {
+		handler(e.(*event.ItemSmelted))
+	})
+}
+
 // OnItemUsed subscribes to items used by the player.
 func (player *Player) OnItemUsed(handler func(event *event.ItemUsed)) {
 	player.on(event.NameItemUsed, func(e interface{}) {

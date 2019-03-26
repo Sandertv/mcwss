@@ -300,6 +300,13 @@ func (player *Player) OnItemDropped(handler func(event *event.ItemDropped)) {
 	})
 }
 
+// OnItemNamed listens for items named by a player using an anvil.
+func (player *Player) OnItemNamed(handler func(event *event.ItemNamed)) {
+	player.on(event.NameItemNamed, func(e interface{}) {
+		handler(e.(*event.ItemNamed))
+	})
+}
+
 // OnItemSmelted listens for items smelted by the player and taken out of the inventory.
 func (player *Player) OnItemSmelted(handler func(event *event.ItemSmelted)) {
 	player.on(event.NameItemSmelted, func(e interface{}) {

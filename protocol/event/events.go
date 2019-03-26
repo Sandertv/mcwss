@@ -16,6 +16,7 @@ const (
 	NameItemDropped          Name = "ItemDropped"
 	NameItemEquipped         Name = "ItemEquipped"
 	NameItemInteracted       Name = "ItemInteracted"
+	NameItemNamed            Name = "ItemNamed"
 	NameItemSmelted          Name = "ItemSmelted"
 	NameItemUsed             Name = "ItemUsed"
 	NameBookEdited           Name = "BookEdited"
@@ -47,6 +48,7 @@ var Events = map[Name]func() interface{}{
 	NameItemDropped:          func() interface{} { return &ItemDropped{} },
 	NameItemEquipped:         func() interface{} { return &ItemEquipped{} },
 	NameItemInteracted:       func() interface{} { return &ItemInteracted{} },
+	NameItemNamed:            func() interface{} { return &ItemNamed{} },
 	NameItemSmelted:          func() interface{} { return &ItemSmelted{} },
 	NameItemUsed:             func() interface{} { return &ItemUsed{} },
 	NameBookEdited:           func() interface{} { return &BookEdited{} },

@@ -171,6 +171,13 @@ func (player *Player) EnableDebug() {
 	player.debug = true
 }
 
+// OnMobBorn listens for entities born by the player feeding two entities.
+func (player *Player) OnMobBorn(handler func(event *event.MobBorn)) {
+	player.on(event.NameMobBorn, func(e interface{}) {
+		handler(e.(*event.MobBorn))
+	})
+}
+
 // OnMobKilled listens for entities that were killed by the entity. Note that indirect killing methods such as
 // drowning an entity, hitting off an edge, suffocating it etc. does not trigger the event.
 func (player *Player) OnMobKilled(handler func(event *event.MobKilled)) {

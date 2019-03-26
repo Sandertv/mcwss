@@ -21,6 +21,7 @@ const (
 	NameItemUsed             Name = "ItemUsed"
 	NameBookEdited           Name = "BookEdited"
 	NameSignedBookOpened     Name = "SignedBookOpened"
+	NameMobBorn              Name = "MobBorn"
 	NameMobInteracted        Name = "MobInteracted"
 	NameMobKilled            Name = "MobKilled"
 	NameStartWorld           Name = "StartWorld"
@@ -53,6 +54,7 @@ var Events = map[Name]func() interface{}{
 	NameItemUsed:             func() interface{} { return &ItemUsed{} },
 	NameBookEdited:           func() interface{} { return &BookEdited{} },
 	NameSignedBookOpened:     func() interface{} { return &SignedBookOpened{} },
+	NameMobBorn:              func() interface{} { return &MobBorn{} },
 	NameMobInteracted:        func() interface{} { return &MobInteracted{} },
 	NameMobKilled:            func() interface{} { return &MobKilled{} },
 	NameStartWorld:           func() interface{} { return &StartWorld{} },

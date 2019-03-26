@@ -171,6 +171,22 @@ func (player *Player) EnableDebug() {
 	player.debug = true
 }
 
+// OnGameRulesLoaded listens for the game rules to be loaded for a player. This happens when the player joins
+// a game, regardless whether it's multi-player or single-player.
+func (player *Player) OnGameRulesLoaded(handler func(event *event.GameRulesLoaded)) {
+	player.on(event.NameGameRulesLoaded, func(e interface{}) {
+		handler(e.(*event.GameRulesLoaded))
+	})
+}
+
+// OnGameRulesUpdated listens for game rule updates for a player. This event is called whenever a specific
+// game rule is changed.
+func (player *Player) OnGameRulesUpdated(handler func(event *event.GameRulesUpdated)) {
+	player.on(event.NameGameRulesUpdated, func(e interface{}) {
+		handler(e.(*event.GameRulesUpdated))
+	})
+}
+
 // OnMobBorn listens for entities born by the player feeding two entities.
 func (player *Player) OnMobBorn(handler func(event *event.MobBorn)) {
 	player.on(event.NameMobBorn, func(e interface{}) {

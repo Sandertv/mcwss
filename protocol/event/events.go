@@ -8,6 +8,8 @@ const (
 	NameBlockPlaced          Name = "BlockPlaced"
 	NameBlockBroken          Name = "BlockBroken"
 	NameEndOfDay             Name = "EndOfDay"
+	NameGameRulesLoaded      Name = "GameRulesLoaded"
+	NameGameRulesUpdated     Name = "GameRulesUpdated"
 	NamePlayerMessage        Name = "PlayerMessage"
 	NamePlayerTravelled      Name = "PlayerTravelled"
 	NamePlayerTransform      Name = "PlayerTransform"
@@ -42,6 +44,8 @@ var Events = map[Name]func() interface{}{
 	NameBlockPlaced:          func() interface{} { return &BlockPlaced{} },
 	NameBlockBroken:          func() interface{} { return &BlockBroken{} },
 	NameEndOfDay:             func() interface{} { return &EndOfDay{} },
+	NameGameRulesLoaded:      func() interface{} { return &GameRulesLoaded{} },
+	NameGameRulesUpdated:     func() interface{} { return &GameRulesUpdated{} },
 	NamePlayerMessage:        func() interface{} { return &PlayerMessage{} },
 	NamePlayerTravelled:      func() interface{} { return &PlayerTravelled{} },
 	NamePlayerTransform:      func() interface{} { return &PlayerTransform{} },

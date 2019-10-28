@@ -36,8 +36,6 @@ type Player struct {
 
 	close       chan bool
 	packetStack chan interface{}
-
-	lastReceivedMessage string
 }
 
 // NewPlayer returns an initialised player for a websocket connection.
@@ -388,18 +386,10 @@ func (player *Player) OnBlockBroken(handler func(event *event.BlockBroken)) {
 	})
 }
 
-// OnPlayerMessage subscribes to player messages sent and received by the client. Note that an event
-// is called both when the player chats and when the player receives its own chat, resulting in a duplicate
-// event when the player chats.
+// OnPlayerMessage subscribes to player messages sent and received by the client.
 func (player *Player) OnPlayerMessage(handler func(event *event.PlayerMessage)) {
 	player.on(event.NamePlayerMessage, func(e interface{}) {
-		messageEvent := e.(*event.PlayerMessage)
-		if messageEvent.Message == player.lastReceivedMessage {
-			// This is a hack for duplicated messages on the vanilla server.
-			return
-		}
-		player.lastReceivedMessage = messageEvent.Message
-		handler(messageEvent)
+		handler(e.(*event.PlayerMessage))
 	})
 }
 

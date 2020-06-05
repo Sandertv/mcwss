@@ -32,6 +32,7 @@ type Properties struct {
 	EditionType    string `json:"editionType"`
 	Locale         string `json:"locale"`
 	VRMode         bool   `json:"vrMode"`
-	// BuildTypeID is a key that is only set when the Minecraft version is
+	// BuildTypeID is a key that is only set when the Minecraft build is a development build. It is not
+	// present for normal clients.
 	BuildTypeID int `json:",omitempty"`
 }

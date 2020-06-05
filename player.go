@@ -102,6 +102,16 @@ func (player *Player) Position(f func(position mctype.Position)) {
 	})
 }
 
+// Rotation requests the Y-Rotation (yaw) of a player and calls the function passed when a response is 
+// received, containing the rotation of the player.
+func (player *Player) Rotation(f func(rotation float64)) {
+	player.Exec(command.QueryTargetRequest(mctype.Target(player.name)), func(response *command.QueryTarget) {
+		if len(*response.Details) == 1 {
+			f((*response.Details)[0].YRotation)
+		}
+	})
+}
+
 // EduInformation requests information about the player (specifically education edition related, but
 // education edition needs not to be enabled) and calls the function passed when a response is received.
 func (player *Player) EduInformation(f func(info *command.EduClientInfo)) {

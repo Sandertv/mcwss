@@ -18,7 +18,7 @@ so changing this setting will not have an effect on the behaviour of mcwss.
 ## Getting Started
 
 ### Prerequisites
-mcwss is a Go library. To use it, Go must be installed. The library may be downloaded using `go get github.com/Sandertv/mcwss`.
+mcwss is a Go library. To use it, Go must be installed. The library may be downloaded using `go get github.com/sandertv/mcwss`.
 
 ### Usage
 ```go
